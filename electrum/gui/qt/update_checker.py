@@ -4,6 +4,7 @@
 
 import asyncio
 import base64
+import jsondump
 
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel, QProgressBar,
@@ -17,7 +18,6 @@ from electrum.util import make_aiohttp_session
 from electrum.logging import Logger
 from electrum.network import Network
 from electrum._vendor.distutils.version import StrictVersion
-
 
 class UpdateCheck(QDialog, Logger):
     url = "https://electrum.org/version"
@@ -108,7 +108,9 @@ class UpdateCheckThread(QThread, Logger):
         #       and it's bad not to get an update notification just because we did not wait enough.
         async with make_aiohttp_session(proxy=self.network.proxy, timeout=120) as session:
             async with session.get(UpdateCheck.url) as result:
-                signed_version_dict = await result.json(content_type=None)
+                signed_version_dict = jsondump.loads(await result.text())
+                print(signed_version_dict)
+                #signed_version_dict = await result.json(content_type=None)
                 # example signed_version_dict:
                 # {
                 #     "version": "3.9.9",
