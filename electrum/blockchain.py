@@ -1,5 +1,5 @@
-# Electrum - lightweight Bitcoin client
-# Copyright (C) 2012 thomasv@ecdsa.org
+# Pywallet - lightweight Bitcoin client
+# Copyright (C) 2024 jackp.watson888@outlook.com
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files

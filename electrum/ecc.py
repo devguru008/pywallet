@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Electrum - lightweight Bitcoin client
+# Pywallet - lightweight Bitcoin client
 # Copyright (C) 2018-2024 The Electrum developers
 #
 # Permission is hereby granted, free of charge, to any person

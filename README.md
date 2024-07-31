@@ -1,4 +1,4 @@
-# Electrum - Lightweight Bitcoin client
+# Pywallet - lightweight Bitcoin client
 
 ```
 Licence: MIT Licence

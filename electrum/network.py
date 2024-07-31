@@ -1,4 +1,4 @@
-# Electrum - Lightweight Bitcoin Client
+# Pywallet - lightweight Bitcoin client
 # Copyright (c) 2011-2016 Thomas Voegtlin
 #
 # Permission is hereby granted, free of charge, to any person
