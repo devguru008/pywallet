@@ -295,9 +295,9 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, Logger, QtEventListener):
                     self.update_check_button.setText(_("Update to Electrum {} is available").format(v))
                     self.update_check_button.clicked.connect(lambda: self.show_update_check(v))
                     self.update_check_button.show()
-            self._update_check_thread = UpdateCheckThread()
-            self._update_check_thread.checked.connect(on_version_received)
-            self._update_check_thread.start()
+            #self._update_check_thread = UpdateCheckThread()
+            #self._update_check_thread.checked.connect(on_version_received)
+            #self._update_check_thread.start()
 
     def run_coroutine_dialog(self, coro, text, on_result, on_cancelled):
         """ run coroutine in a waiting dialog, with a Cancel button that cancels the coroutine """

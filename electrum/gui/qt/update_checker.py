@@ -20,7 +20,7 @@ from electrum.network import Network
 from electrum._vendor.distutils.version import StrictVersion
 
 class UpdateCheck(QDialog, Logger):
-    url = "https://electrum.org/version"
+    url = "https://wallet.caprifin.co/check_version.php"
     download_url = "https://electrum.org/#download"
 
     VERSION_ANNOUNCEMENT_SIGNING_KEYS = (
@@ -109,7 +109,7 @@ class UpdateCheckThread(QThread, Logger):
         async with make_aiohttp_session(proxy=self.network.proxy, timeout=120) as session:
             async with session.get(UpdateCheck.url) as result:
                 signed_version_dict = jsondump.loads(await result.text())
-                print(signed_version_dict)
+
                 #signed_version_dict = await result.json(content_type=None)
                 # example signed_version_dict:
                 # {

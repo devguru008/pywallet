@@ -27,7 +27,19 @@ import os
 import signal
 import sys
 import threading
+import asyncio
+import base64
+import jsondump
+
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from typing import Optional, TYPE_CHECKING, List, Sequence
+from electrum import constants
+from electrum import ecc
+from electrum.util import make_aiohttp_session
+from electrum.logging import Logger
+from electrum.network import Network
+from electrum._vendor.distutils.version import StrictVersion
+from .update_checker import UpdateCheck, UpdateCheckThread
 
 try:
     import PyQt5
@@ -413,6 +425,12 @@ class ElectrumGui(BaseElectrumGui, Logger):
         return window
 
     def _start_wizard_to_select_or_create_wallet(self, path) -> Optional[Abstract_Wallet]:
+        def on_version_received(v):
+            self.logger.info('new version of pywallet available')
+        self._update_check_thread = UpdateCheckThread()
+        self._update_check_thread.checked.connect(on_version_received)
+        self._update_check_thread.start()
+
         wizard = QENewWalletWizard(self.config, self.app, self.plugins, self.daemon, path)
         result = wizard.exec()
         # TODO: use dialog.open() instead to avoid new event loop spawn?
