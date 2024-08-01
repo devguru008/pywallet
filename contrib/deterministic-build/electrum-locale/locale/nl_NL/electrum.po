@@ -438,7 +438,7 @@ msgstr "Geavanceerde netwerkinstellingen"
 
 #: electrum/plugins/safe_t/qt.py:291 electrum/plugins/keepkey/qt.py:413
 #: electrum/plugins/trezor/qt.py:559
-msgid "After disabling passphrases, you can only pair this Electrum wallet if it had an empty passphrase.  If its passphrase was not empty, you will need to create a new wallet.  You can use this wallet again at any time by re-enabling passphrases and entering its passphrase."
+msgid "After disabling passphrases, you can only pair this Pywallet if it had an empty passphrase.  If its passphrase was not empty, you will need to create a new wallet.  You can use this wallet again at any time by re-enabling passphrases and entering its passphrase."
 msgstr "Na het uitschakelen van wachtzinnen kunt u deze Electrum-portemonnee alleen koppelen indien hij een lege wachtzin had. Als de wachtzin niet leeg was moet u een nieuwe portemonnee maken. U kunt deze portemonnee altijd opnieuw gebruiken nadat u wachtzinnen opnieuw inschakelt en zijn wachtzin invoert."
 
 #: electrum/gui/qt/channels_list.py:149
@@ -2002,7 +2002,7 @@ msgid "Electrum uses static channel backups. If you lose your wallet file, you w
 msgstr "Electrum gebruikt statische kanaal backups. Als je je portemonnee bestand verliest, zul je je kanalen geforceerd moeten laten sluiten door de wederpartij om de munten weer vrij te maken. Dit gaat er van uit dat de wederpartij online is en geen data is verloren."
 
 #: electrum/gui/qt/wizard/wallet.py:267
-msgid "Electrum wallet"
+msgid "Pywallet"
 msgstr "Electrum-portemonnee"
 
 #: electrum/gui/qt/main_window.py:653
@@ -5605,7 +5605,7 @@ msgstr "De kanaalpartner kan Trampoline betalingen doorgeven."
 #: electrum/gui/messages.py:18
 msgid "The channel you created is not recoverable from seed.\n"
 "To prevent fund losses, please save this backup on another device.\n"
-"It may be imported in another Electrum wallet with the same seed."
+"It may be imported in another Pywallet with the same seed."
 msgstr "Het kanaal wat is aangemaakt is niet herstelbaar vanuit de seed.\n"
 "Sla deze backup op op een ander apparaat om verlies te voorkomen.\n"
 "Deze backup kun je importeren in een andere Electrum portemonnee met dezelfde seed."
@@ -6960,7 +6960,7 @@ msgstr "U dient een back-upmap in te stellen in uw voorkeuren"
 
 #: electrum/plugins/safe_t/qt.py:31 electrum/plugins/keepkey/qt.py:31
 #: electrum/plugins/trezor/qt.py:33
-msgid "You need to create a separate Electrum wallet for each passphrase you use as they each generate different addresses.  Changing your passphrase does not lose other wallets, each is still accessible behind its own passphrase."
+msgid "You need to create a separate Pywallet for each passphrase you use as they each generate different addresses.  Changing your passphrase does not lose other wallets, each is still accessible behind its own passphrase."
 msgstr "U moet een aparte Electrum-portemonnee maken voor elke wachtzin die u gebruikt, aangezien elk andere adressen genereert. Het wijzigen van uw wachtzin leidt niet tot verlies van andere portemonnees, elk blijft beschikbaar achter zijn eigen wachtzin."
 
 #: electrum/gui/qt/utxo_list.py:211
@@ -7041,7 +7041,7 @@ msgstr "Je claim transactie wordt verzonden zodra de stortingstransactie bevesti
 
 #: electrum/plugins/safe_t/qt.py:298 electrum/plugins/keepkey/qt.py:420
 #: electrum/plugins/trezor/qt.py:566
-msgid "Your current Electrum wallet can only be used with an empty passphrase.  You must create a separate wallet for other passphrases as each one generates a new set of addresses."
+msgid "Your current Pywallet can only be used with an empty passphrase.  You must create a separate wallet for other passphrases as each one generates a new set of addresses."
 msgstr "Uw huidige Electrum-portemonnee kan uitsluitend worden gebruikt met een lege wachtzin. U moet een aparte portemonnee maken voor andere wachtzinnen, aangezien elk een nieuwe set adressen genereert."
 
 #: electrum/plugins/safe_t/safe_t.py:251
@@ -8177,7 +8177,7 @@ msgstr "Om te voorkomen dat je geld kwijtraakt, sla deze backup op op een ander 
 
 #: ../gui/qml/components/ChannelOpenProgressDialog.qml:123
 msgctxt "ChannelOpenProgressDialog|"
-msgid "It may be imported in another Electrum wallet with the same seed."
+msgid "It may be imported in another Pywallet with the same seed."
 msgstr "Het kan geïmporteerd worden in een andere Electrum portemonnee met dezelfde 'seed'"
 
 #: ../gui/qml/components/Channels.qml:33

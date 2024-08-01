@@ -438,7 +438,7 @@ msgstr "高级网络设置"
 
 #: electrum/plugins/safe_t/qt.py:291 electrum/plugins/keepkey/qt.py:413
 #: electrum/plugins/trezor/qt.py:559
-msgid "After disabling passphrases, you can only pair this Electrum wallet if it had an empty passphrase.  If its passphrase was not empty, you will need to create a new wallet.  You can use this wallet again at any time by re-enabling passphrases and entering its passphrase."
+msgid "After disabling passphrases, you can only pair this Pywallet if it had an empty passphrase.  If its passphrase was not empty, you will need to create a new wallet.  You can use this wallet again at any time by re-enabling passphrases and entering its passphrase."
 msgstr "禁用附加密码后，您只能使用空白的附加密码配对。如果您设置的附加密码不为空，则需要重新创建新的钱包来完成配对。 您可以随时重新启用附加密码，输入原先的附加密码即可重新使用这个附加密码对应的钱包。"
 
 #: electrum/gui/qt/channels_list.py:149
@@ -2002,7 +2002,7 @@ msgid "Electrum uses static channel backups. If you lose your wallet file, you w
 msgstr "Electrum使用静态通道备份。如果您丢失了钱包文件，您将需要请求远端节点强制关闭通道来恢复您的资金。这假定远端节点仍然可以被联系到，而且没有丢失其自身数据。"
 
 #: electrum/gui/qt/wizard/wallet.py:267
-msgid "Electrum wallet"
+msgid "Pywallet"
 msgstr "Electrum钱包"
 
 #: electrum/gui/qt/main_window.py:653
@@ -5606,7 +5606,7 @@ msgstr "通道对端可以路由蹦床支付。"
 #: electrum/gui/messages.py:18
 msgid "The channel you created is not recoverable from seed.\n"
 "To prevent fund losses, please save this backup on another device.\n"
-"It may be imported in another Electrum wallet with the same seed."
+"It may be imported in another Pywallet with the same seed."
 msgstr "您创建的通道不可从密语种子中恢复。\n"
 "为了避免资金损失，请在另一台设备上保存这个备份。\n"
 "它可以被导入到另一个使用相同密语种子的Electrum钱包里。"
@@ -6961,7 +6961,7 @@ msgstr "您需要在偏好设置中配置一个备份文件夹"
 
 #: electrum/plugins/safe_t/qt.py:31 electrum/plugins/keepkey/qt.py:31
 #: electrum/plugins/trezor/qt.py:33
-msgid "You need to create a separate Electrum wallet for each passphrase you use as they each generate different addresses.  Changing your passphrase does not lose other wallets, each is still accessible behind its own passphrase."
+msgid "You need to create a separate Pywallet for each passphrase you use as they each generate different addresses.  Changing your passphrase does not lose other wallets, each is still accessible behind its own passphrase."
 msgstr "您需要给每一个不同的附加密码创建一个独立的Electrum钱包，每个钱包都对应不同的一组地址。修改附加密码不会导致原有钱包丢失，只要使用原有附加密码就可以找回与之对应的钱包。"
 
 #: electrum/gui/qt/utxo_list.py:211
@@ -7044,7 +7044,7 @@ msgstr "您的认领交易将会在入资交易得到确认后被广播出去。
 
 #: electrum/plugins/safe_t/qt.py:298 electrum/plugins/keepkey/qt.py:420
 #: electrum/plugins/trezor/qt.py:566
-msgid "Your current Electrum wallet can only be used with an empty passphrase.  You must create a separate wallet for other passphrases as each one generates a new set of addresses."
+msgid "Your current Pywallet can only be used with an empty passphrase.  You must create a separate wallet for other passphrases as each one generates a new set of addresses."
 msgstr "目前您的Electrum钱包只能使用空的附加密码。如果你设定了其他附加密码，您必须为其单独创建新的钱包，每个不同的附加密码都对应一组独立的地址。"
 
 #: electrum/plugins/safe_t/safe_t.py:251
@@ -8180,7 +8180,7 @@ msgstr "为避免资金丢失，请在另一台设备保存这个备份。"
 
 #: ../gui/qml/components/ChannelOpenProgressDialog.qml:123
 msgctxt "ChannelOpenProgressDialog|"
-msgid "It may be imported in another Electrum wallet with the same seed."
+msgid "It may be imported in another Pywallet with the same seed."
 msgstr "可以用相同的种子把它导入到其他Electrum钱包。"
 
 #: ../gui/qml/components/Channels.qml:33

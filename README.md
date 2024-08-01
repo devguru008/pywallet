@@ -65,7 +65,7 @@ Electrum from its root directory without installing it on your
 system; all the pure python dependencies are included in the 'packages'
 directory. To run Electrum from its root directory, just do:
 ```
-$ ./run_electrum
+$ ./run_pywallet
 ```
 
 You can also install Electrum on your system, by running this command:
@@ -105,7 +105,7 @@ $ ./contrib/pull_locale
 
 Finally, to start Electrum:
 ```
-$ ./run_electrum
+$ ./run_pywallet
 ```
 
 ### Run tests

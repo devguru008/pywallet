@@ -438,7 +438,7 @@ msgstr "Erweiterte Netzwerkeinstellungen"
 
 #: electrum/plugins/safe_t/qt.py:291 electrum/plugins/keepkey/qt.py:413
 #: electrum/plugins/trezor/qt.py:559
-msgid "After disabling passphrases, you can only pair this Electrum wallet if it had an empty passphrase.  If its passphrase was not empty, you will need to create a new wallet.  You can use this wallet again at any time by re-enabling passphrases and entering its passphrase."
+msgid "After disabling passphrases, you can only pair this Pywallet if it had an empty passphrase.  If its passphrase was not empty, you will need to create a new wallet.  You can use this wallet again at any time by re-enabling passphrases and entering its passphrase."
 msgstr "Nachdem Sie Passphrasen deaktiviert haben, können Sie diese Electrum-Geldbörse nur koppeln, wenn sie über eine leere Passphrase verfügt. Wenn die Passphrase nicht leer war, müssen Sie eine neue Geldbörse erstellen. Sie können diese Geldbörse jederzeit wieder verwenden, indem Sie Passphrasen erneut aktivieren und die Passphrase eingeben."
 
 #: electrum/gui/qt/channels_list.py:149
@@ -2002,7 +2002,7 @@ msgid "Electrum uses static channel backups. If you lose your wallet file, you w
 msgstr "Electrum verwendet statische Kanalsicherungen. Wenn Sie Ihre Geldbörse-Datei verlieren, müssen Sie die erzwungene Schließung Ihres Kanals durch den Remote-Peer beantragen, um Ihr Geld zurückzugewinnen. Dies setzt voraus, dass der Remote-Peer erreichbar ist und keine eigenen Daten verloren hat."
 
 #: electrum/gui/qt/wizard/wallet.py:267
-msgid "Electrum wallet"
+msgid "Pywallet"
 msgstr "Electrum Geldbörse"
 
 #: electrum/gui/qt/main_window.py:653
@@ -5605,7 +5605,7 @@ msgstr "Der Kanal-Peer kann Trampoline-Zahlungen weiterleiten."
 #: electrum/gui/messages.py:18
 msgid "The channel you created is not recoverable from seed.\n"
 "To prevent fund losses, please save this backup on another device.\n"
-"It may be imported in another Electrum wallet with the same seed."
+"It may be imported in another Pywallet with the same seed."
 msgstr "Der von Ihnen erstellte Kanal kann aus dem Seed nicht wiederhergestellt werden.\n"
 "Um Geldverluste zu vermeiden, speichern Sie dieses Backup bitte auf einem anderen Gerät.\n"
 "Es kann in eine andere Electrum-Geldbörse mit demselben Seed importiert werden."
@@ -6960,7 +6960,7 @@ msgstr "Sie müssen ein Backup-Verzeichnis in Ihren Einstellungen konfigurieren"
 
 #: electrum/plugins/safe_t/qt.py:31 electrum/plugins/keepkey/qt.py:31
 #: electrum/plugins/trezor/qt.py:33
-msgid "You need to create a separate Electrum wallet for each passphrase you use as they each generate different addresses.  Changing your passphrase does not lose other wallets, each is still accessible behind its own passphrase."
+msgid "You need to create a separate Pywallet for each passphrase you use as they each generate different addresses.  Changing your passphrase does not lose other wallets, each is still accessible behind its own passphrase."
 msgstr "Sie müssen eine weitere Electrum-Geldbörse für jede Passphrase erstellen, da sie unterschiedliche Adressen generieren. Das Benutzen einer anderen Passphrase führt nicht zum Verlust der Börse, jede ist weiterhin hinter ihrer Passphrase erreichbar."
 
 #: electrum/gui/qt/utxo_list.py:211
@@ -7042,7 +7042,7 @@ msgstr "Ihre Anspruchstransaktion wird übertragen, sobald die Finanzierungstran
 
 #: electrum/plugins/safe_t/qt.py:298 electrum/plugins/keepkey/qt.py:420
 #: electrum/plugins/trezor/qt.py:566
-msgid "Your current Electrum wallet can only be used with an empty passphrase.  You must create a separate wallet for other passphrases as each one generates a new set of addresses."
+msgid "Your current Pywallet can only be used with an empty passphrase.  You must create a separate wallet for other passphrases as each one generates a new set of addresses."
 msgstr "Ihre aktuelle Electrum-Geldbörse kann nur mit einer leeren Passphrase verwendet werden. Sie müssen eine separate Geldbörse für andere Passphrasen erstellen, da jede einen neuen Satz von Adressen generiert."
 
 #: electrum/plugins/safe_t/safe_t.py:251
@@ -8178,7 +8178,7 @@ msgstr "Um Geldverluste zu vermeiden, speichern Sie dieses Backup bitte auf eine
 
 #: ../gui/qml/components/ChannelOpenProgressDialog.qml:123
 msgctxt "ChannelOpenProgressDialog|"
-msgid "It may be imported in another Electrum wallet with the same seed."
+msgid "It may be imported in another Pywallet with the same seed."
 msgstr "Es kann in eine andere Electrum-Geldbörse mit demselben Seed importiert werden."
 
 #: ../gui/qml/components/Channels.qml:33

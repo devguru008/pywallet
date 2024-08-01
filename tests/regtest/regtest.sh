@@ -4,9 +4,9 @@ set -eu
 
 # alice -> bob -> carol
 
-alice="./run_electrum --regtest -D /tmp/alice"
-bob="./run_electrum --regtest -D /tmp/bob"
-carol="./run_electrum --regtest -D /tmp/carol"
+alice="./run_pywallet --regtest -D /tmp/alice"
+bob="./run_pywallet --regtest -D /tmp/bob"
+carol="./run_pywallet --regtest -D /tmp/carol"
 
 bitcoin_cli="bitcoin-cli -rpcuser=doggman -rpcpassword=donkey -rpcport=18554 -regtest"
 
@@ -18,7 +18,7 @@ function new_blocks()
 function wait_until_htlcs_settled()
 {
     msg="wait until $1's local_unsettled_sent is zero"
-    cmd="./run_electrum --regtest -D /tmp/$1"
+    cmd="./run_pywallet --regtest -D /tmp/$1"
     while unsettled=$($cmd list_channels | jq '.[] | .local_unsettled_sent') && [ $unsettled != "0" ]; do
         sleep 1
         msg="$msg."
@@ -31,7 +31,7 @@ function wait_until_htlcs_settled()
 function wait_for_balance()
 {
     msg="wait until $1's balance reaches $2"
-    cmd="./run_electrum --regtest -D /tmp/$1"
+    cmd="./run_pywallet --regtest -D /tmp/$1"
     while balance=$($cmd getbalance | jq '[.confirmed, .unconfirmed] | to_entries | map(select(.value != null).value) | map(tonumber) | add ') && (( $(echo "$balance < $2" | bc -l) )); do
         sleep 1
 	msg="$msg."
@@ -43,7 +43,7 @@ function wait_for_balance()
 function wait_until_channel_open()
 {
     msg="wait until $1 sees channel open"
-    cmd="./run_electrum --regtest -D /tmp/$1"
+    cmd="./run_pywallet --regtest -D /tmp/$1"
     while channel_state=$($cmd list_channels | jq '.[0] | .state' | tr -d '"') && [ $channel_state != "OPEN" ]; do
         sleep 1
 	msg="$msg."
@@ -55,7 +55,7 @@ function wait_until_channel_open()
 function wait_until_channel_closed()
 {
     msg="wait until $1 sees channel closed"
-    cmd="./run_electrum --regtest -D /tmp/$1"
+    cmd="./run_pywallet --regtest -D /tmp/$1"
     while [[ $($cmd list_channels | jq '.[0].state' | tr -d '"') != "CLOSED" ]]; do
         sleep 1
 	msg="$msg."
@@ -87,7 +87,7 @@ fi
 if [[ $1 == "init" ]]; then
     echo "initializing $2"
     rm -rf /tmp/$2/
-    agent="./run_electrum --regtest -D /tmp/$2"
+    agent="./run_pywallet --regtest -D /tmp/$2"
     $agent create --offline > /dev/null
     $agent setconfig --offline log_to_file True
     $agent setconfig --offline use_gossip True
@@ -101,20 +101,20 @@ fi
 
 if [[ $1 == "setconfig" ]]; then
     # use this to set config vars that need to be set before the daemon is started
-    agent="./run_electrum --regtest -D /tmp/$2"
+    agent="./run_pywallet --regtest -D /tmp/$2"
     $agent setconfig --offline $3 $4
 fi
 
 # start daemons. Bob is started first because he is listening
 if [[ $1 == "start" ]]; then
-    agent="./run_electrum --regtest -D /tmp/$2"
+    agent="./run_pywallet --regtest -D /tmp/$2"
     $agent daemon -d
     $agent load_wallet
     sleep 1 # give time to synchronize
 fi
 
 if [[ $1 == "stop" ]]; then
-    agent="./run_electrum --regtest -D /tmp/$2"
+    agent="./run_pywallet --regtest -D /tmp/$2"
     $agent stop || true
 fi
 
@@ -458,15 +458,15 @@ fi
 if [[ $1 == "unixsockets" ]]; then
     # This looks different because it has to run the entire daemon
     # Test domain socket behavior
-    ./run_electrum --regtest daemon -d --rpcsock=unix # Start daemon with unix domain socket
-    ./run_electrum --regtest stop # Errors if it can't connect
+    ./run_pywallet --regtest daemon -d --rpcsock=unix # Start daemon with unix domain socket
+    ./run_pywallet --regtest stop # Errors if it can't connect
     # Test custom socket path
     f=$(mktemp --dry-run)
-    ./run_electrum --regtest daemon -d --rpcsock=unix --rpcsockpath=$f
+    ./run_pywallet --regtest daemon -d --rpcsock=unix --rpcsockpath=$f
     [ -S $f ] # filename exists and is socket
-    ./run_electrum --regtest stop
+    ./run_pywallet --regtest stop
     rm $f # clean up
     # Test for regressions in the ordinary TCP functionality.
-    ./run_electrum --regtest daemon -d --rpcsock=tcp
-    ./run_electrum --regtest stop
+    ./run_pywallet --regtest daemon -d --rpcsock=tcp
+    ./run_pywallet --regtest stop
 fi

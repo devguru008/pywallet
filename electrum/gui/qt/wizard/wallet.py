@@ -264,7 +264,7 @@ class WalletWizardComponent(WizardComponent, ABC):
 
 class WCWalletName(WalletWizardComponent, Logger):
     def __init__(self, parent, wizard):
-        WalletWizardComponent.__init__(self, parent, wizard, title=_('Electrum wallet'))
+        WalletWizardComponent.__init__(self, parent, wizard, title=_('Pywallet'))
         Logger.__init__(self)
 
         path = wizard._path

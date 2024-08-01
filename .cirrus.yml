@@ -132,7 +132,7 @@ task:
   bitcoind_service_background_script:
     - tests/regtest/run_bitcoind.sh
   electrumx_service_background_script:
-    - tests/regtest/run_electrumx.sh
+    - tests/regtest/run_pywalletx.sh
   regtest_script:
     - sleep 10s
     - python3 -m unittest tests/regtest.py

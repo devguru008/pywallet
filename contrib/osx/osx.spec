@@ -4,11 +4,11 @@ from PyInstaller.utils.hooks import collect_data_files, collect_submodules, coll
 
 import sys, os
 
-PACKAGE_NAME='Electrum.app'
-PYPKG='electrum'
-MAIN_SCRIPT='run_electrum'
+PACKAGE_NAME='Pywallet.app'
+PYPKG='pywallet'
+MAIN_SCRIPT='run_pywallet'
 PROJECT_ROOT = os.path.abspath(".")
-ICONS_FILE=f"{PROJECT_ROOT}/{PYPKG}/gui/icons/electrum.icns"
+ICONS_FILE=f"{PROJECT_ROOT}/{PYPKG}/gui/icons/pywallet.icns"
 
 
 VERSION = os.environ.get("PYWALLET_VERSION")

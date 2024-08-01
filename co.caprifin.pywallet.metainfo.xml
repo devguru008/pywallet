@@ -3,15 +3,15 @@
 <!--
   Copyright 2023-2024 Soren Stoutner <soren@debian.org>.
 
-  This file can be validated using `appstreamcli validate org.electrum.electrum.metainfo.xml`.
+  This file can be validated using `appstreamcli validate co.caprifin.pywallet.metainfo.xml`.
 
   Distributed under the MIT software license, see the accompanying file LICENCE or http://www.opensource.org/licenses/mit-license.php.
 -->
 
 <component type="desktop-application">
-  <id>org.electrum.electrum</id>
+  <id>co.caprifin.pywallet</id>
 
-  <name>Electrum</name>
+  <name>Pywallet</name>
   <summary>Bitcoin Wallet</summary>
 
   <metadata_license>MIT</metadata_license>
@@ -19,17 +19,17 @@
 
   <description>
     <p>
-      Electrum is a lightweight Bitcoin wallet focused on speed, with low resource usage and simplifying Bitcoin.
+      Pywallet is a lightweight Bitcoin wallet focused on speed, with low resource usage and simplifying Bitcoin.
       Startup times are instant because it operates in conjunction with high-performance servers that handle the most complicated parts of the Bitcoin system.
     </p>
   </description>
 
-  <url type="homepage">https://www.electrum.org/</url>
-  <developer id="org.electrum">
-      <name>The Electrum developers</name>
+  <url type="homepage">https://wallet.caprifin.co/</url>
+  <developer id="org.caprifin">
+      <name>The caprifin developers</name>
   </developer>
 
-  <launchable type="desktop-id">electrum.desktop</launchable>
+  <launchable type="desktop-id">pywallet.desktop</launchable>
 
   <content_rating type="oars-1.1" />
 </component>

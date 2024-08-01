@@ -5,9 +5,9 @@ from PyInstaller.utils.hooks import collect_data_files, collect_submodules, coll
 import sys, os
 
 PYPKG="electrum"
-MAIN_SCRIPT="run_electrum"
+MAIN_SCRIPT="run_pywallet"
 PROJECT_ROOT = "C:/electrum"
-ICONS_FILE=f"{PROJECT_ROOT}/{PYPKG}/gui/icons/electrum.ico"
+ICONS_FILE=f"{PROJECT_ROOT}/{PYPKG}/gui/icons/pywallet.ico"
 
 cmdline_name = os.environ.get("ELECTRUM_CMDLINE_NAME")
 if not cmdline_name:

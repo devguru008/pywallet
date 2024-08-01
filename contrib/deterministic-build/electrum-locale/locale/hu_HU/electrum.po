@@ -438,7 +438,7 @@ msgstr "Speciális hálózati beállítások"
 
 #: electrum/plugins/safe_t/qt.py:291 electrum/plugins/keepkey/qt.py:413
 #: electrum/plugins/trezor/qt.py:559
-msgid "After disabling passphrases, you can only pair this Electrum wallet if it had an empty passphrase.  If its passphrase was not empty, you will need to create a new wallet.  You can use this wallet again at any time by re-enabling passphrases and entering its passphrase."
+msgid "After disabling passphrases, you can only pair this Pywallet if it had an empty passphrase.  If its passphrase was not empty, you will need to create a new wallet.  You can use this wallet again at any time by re-enabling passphrases and entering its passphrase."
 msgstr "A kulcsszöveg letiltása után csak akkor párosíthatod az Electrum tárcádat, ha az üres kulcsszöveggel rendelkezett. Ha a kulcsszöveg nem volt üres, új tárcát kell létrehoznod. Ezt a tárcát bármikor, újra használhatod a kulcsszöveg újbóli engedélyezésével és a kulcsszövegének beírásával."
 
 #: electrum/gui/qt/channels_list.py:149
@@ -2002,7 +2002,7 @@ msgid "Electrum uses static channel backups. If you lose your wallet file, you w
 msgstr "Az Electrum statikus csatorna biztonsági mentéseket használ. Ha elveszíted a tárcafájlt, akkor a távoli féltől kell kérned a csatorna kényszerített lezárását, hogy visszakapd a pénzedet. Ez feltételezi, hogy a távoli partner elérhető, és nem vesztette el a saját adatait."
 
 #: electrum/gui/qt/wizard/wallet.py:267
-msgid "Electrum wallet"
+msgid "Pywallet"
 msgstr "Electrum pénztárca"
 
 #: electrum/gui/qt/main_window.py:653
@@ -5606,7 +5606,7 @@ msgstr "A csatornához tartozó partner képes Trampoline fizetéseket továbbí
 #: electrum/gui/messages.py:18
 msgid "The channel you created is not recoverable from seed.\n"
 "To prevent fund losses, please save this backup on another device.\n"
-"It may be imported in another Electrum wallet with the same seed."
+"It may be imported in another Pywallet with the same seed."
 msgstr "A létrehozott csatorna nem állítható vissza a magból.\n"
 "A pénz elvesztésének megelőzése érdekében, mentsd ezt a biztonsági másolatot egy másik eszközre.\n"
 "Ez importálható egy ugyanazzal a maggal rendelkező, másik Electrum tárcába."
@@ -6960,7 +6960,7 @@ msgstr "A beállításoknál meg kell adnod egy biztonsági mentés könyvtárat
 
 #: electrum/plugins/safe_t/qt.py:31 electrum/plugins/keepkey/qt.py:31
 #: electrum/plugins/trezor/qt.py:33
-msgid "You need to create a separate Electrum wallet for each passphrase you use as they each generate different addresses.  Changing your passphrase does not lose other wallets, each is still accessible behind its own passphrase."
+msgid "You need to create a separate Pywallet for each passphrase you use as they each generate different addresses.  Changing your passphrase does not lose other wallets, each is still accessible behind its own passphrase."
 msgstr "Minden kulcsszöveghez külön Electrum tárcát kell létrehoznod, mivel minden jelszó különböző címeket hoz létre. A kulcsszöveg megváltoztatásával nem veszíted el a többi tárcádat, mindegyiket el tudod érni a hozzá tartozó kulcsszöveggel."
 
 #: electrum/gui/qt/utxo_list.py:211
@@ -7042,7 +7042,7 @@ msgstr "Az igénylő tranzakciód a fedezetet biztosító tranzakció megerősí
 
 #: electrum/plugins/safe_t/qt.py:298 electrum/plugins/keepkey/qt.py:420
 #: electrum/plugins/trezor/qt.py:566
-msgid "Your current Electrum wallet can only be used with an empty passphrase.  You must create a separate wallet for other passphrases as each one generates a new set of addresses."
+msgid "Your current Pywallet can only be used with an empty passphrase.  You must create a separate wallet for other passphrases as each one generates a new set of addresses."
 msgstr "A jelenlegi Electrum tárcád csak egy üres kulcsszöveggel használható. Minden kulcsszöveghez egy külön tárcát kell létrehoznod, mivel minden kulcsszöveg más címeket hoz létre."
 
 #: electrum/plugins/safe_t/safe_t.py:251
@@ -8178,7 +8178,7 @@ msgstr "Hogy ne veszíts el pénzt, másold a biztonsági mentés egy másik esz
 
 #: ../gui/qml/components/ChannelOpenProgressDialog.qml:123
 msgctxt "ChannelOpenProgressDialog|"
-msgid "It may be imported in another Electrum wallet with the same seed."
+msgid "It may be imported in another Pywallet with the same seed."
 msgstr "Importálható egy másik Electrum tárcába, ami ugyanezt a magot használja."
 
 #: ../gui/qml/components/Channels.qml:33

@@ -17,7 +17,7 @@ MSG_REQUEST_FORCE_CLOSE = _(
 MSG_CREATED_NON_RECOVERABLE_CHANNEL = _(
 """The channel you created is not recoverable from seed.
 To prevent fund losses, please save this backup on another device.
-It may be imported in another Electrum wallet with the same seed."""
+It may be imported in another Pywallet with the same seed."""
 )
 
 MSG_LIGHTNING_EXPERIMENTAL_WARNING = _(

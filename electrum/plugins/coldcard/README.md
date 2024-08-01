@@ -18,7 +18,7 @@ Coldcard uses the standard for unsigned transactions:
 PSBT = Partially Signed Bitcoin Transaction = BIP174
 
 The Coldcard can be used 100% offline: it can generate a skeleton
-Electrum wallet and save it to MicroSD card. Transport that file
+Pywallet and save it to MicroSD card. Transport that file
 to Electrum and it will fetch history, blockchain details and then
 operate in "unpaired" mode.
 
