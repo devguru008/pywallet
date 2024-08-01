@@ -48,7 +48,7 @@ class UpdateCheck(QDialog, Logger):
         self.content.addWidget(self.pb)
 
         versions = QHBoxLayout()
-        versions.addWidget(QLabel(_("Current version: {}").format(version.ELECTRUM_VERSION)))
+        versions.addWidget(QLabel(_("Current version: {}").format(version.PYWALLET_VERSION)))
         self.latest_version_label = QLabel(_("Latest version: {}").format(" "))
         versions.addWidget(self.latest_version_label)
         self.content.addLayout(versions)
@@ -76,7 +76,7 @@ class UpdateCheck(QDialog, Logger):
 
     @staticmethod
     def is_newer(latest_version):
-        return latest_version > StrictVersion(version.ELECTRUM_VERSION)
+        return latest_version > StrictVersion(version.PYWALLET_VERSION)
 
     def update_view(self, latest_version=None):
         if latest_version:

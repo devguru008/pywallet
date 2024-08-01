@@ -27,7 +27,7 @@ import sys
 import queue
 from typing import NamedTuple, Optional
 
-from .version import ELECTRUM_VERSION
+from .version import PYWALLET_VERSION
 from . import constants
 from .i18n import _
 from .util import make_aiohttp_session, error_text_str_to_safe_str
@@ -120,7 +120,7 @@ class BaseCrashReporter(Logger):
 
     def get_additional_info(self):
         args = {
-            "app_version": get_git_version() or ELECTRUM_VERSION,
+            "app_version": get_git_version() or PYWALLET_VERSION,
             "python_version": sys.version,
             "os": describe_os_version(),
             "wallet_type": "unknown",

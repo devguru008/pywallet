@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # env vars:
-# - WWW_DIR: path to "electrum-web" git clone
+# - WWW_DIR: path to "pywallet-web" git clone
 # - for signing the version announcement file:
 #   - ELECTRUM_SIGNING_ADDRESS (required)
 #   - ELECTRUM_SIGNING_WALLET (required)
@@ -26,7 +26,7 @@ fi
 
 
 if [ -z "$WWW_DIR" ] ; then
-    WWW_DIR=/opt/electrum-web
+    WWW_DIR=/opt/pywallet-web
 fi
 
 if [ -z "$ELECTRUM_SIGNING_WALLET" ] || [ -z "$ELECTRUM_SIGNING_ADDRESS" ]; then
@@ -34,7 +34,7 @@ if [ -z "$ELECTRUM_SIGNING_WALLET" ] || [ -z "$ELECTRUM_SIGNING_ADDRESS" ]; then
     exit 1
 fi
 
-VERSION=$("$CONTRIB"/print_electrum_version.py)
+VERSION=$("$CONTRIB"/print_pywallet_version.py)
 info "VERSION: $VERSION"
 
 set -x

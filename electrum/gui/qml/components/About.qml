@@ -37,7 +37,7 @@ Pane {
                 Layout.alignment: Qt.AlignRight
             }
             Label {
-                text: BUILD.electrum_version
+                text: BUILD.pywallet_version
             }
             Label {
                 text: qsTr('Protocol version')

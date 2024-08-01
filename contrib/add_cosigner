@@ -14,7 +14,7 @@
 # - SFTPUSER runs `$ SSHUSER=$SFTPUSER electrum/contrib/add_cosigner $BUILDER`
 # - SFTPUSER runs `$ electrum/contrib/make_download $WWW_DIR`
 # -     $ (cd $WWW_DIR; git commit -a -m "add_cosigner"; git push)
-# - SFTPUSER runs `$ electrum-web/publish.sh $SFTPUSER`
+# - SFTPUSER runs `$ pywallet-web/publish.sh $SFTPUSER`
 # - (for the website to be updated, both ThomasV and SomberNight needs to run publish.sh)
 
 import re
@@ -36,14 +36,14 @@ version_spec = importlib.util.spec_from_file_location('version', 'electrum/versi
 version_module = importlib.util.module_from_spec(version_spec)
 version_spec.loader.exec_module(version_module)
 
-ELECTRUM_VERSION = version_module.ELECTRUM_VERSION
+PYWALLET_VERSION = version_module.PYWALLET_VERSION
 APK_VERSION = version_module.APK_VERSION
-print("version", ELECTRUM_VERSION)
+print("version", PYWALLET_VERSION)
 
 # GPG name of cosigner
 cosigner = sys.argv[1]
 
-version = version_win = version_mac = ELECTRUM_VERSION
+version = version_win = version_mac = PYWALLET_VERSION
 
 files = {
     "tgz": f"Electrum-{version}.tar.gz",

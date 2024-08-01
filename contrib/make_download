@@ -18,9 +18,9 @@ version_spec = importlib.util.spec_from_file_location('version', 'electrum/versi
 version_module = importlib.util.module_from_spec(version_spec)
 version_spec.loader.exec_module(version_module)
 
-ELECTRUM_VERSION = version_module.ELECTRUM_VERSION
+PYWALLET_VERSION = version_module.PYWALLET_VERSION
 APK_VERSION = version_module.APK_VERSION
-print(f"version: {ELECTRUM_VERSION}", file=sys.stderr)
+print(f"version: {PYWALLET_VERSION}", file=sys.stderr)
 
 dirname = sys.argv[1]
 
@@ -32,7 +32,7 @@ download_template = download_page + ".template"
 with open(download_template) as f:
     download_page_str = f.read()
 
-version = version_win = version_mac = version_android = ELECTRUM_VERSION
+version = version_win = version_mac = version_android = PYWALLET_VERSION
 download_page_str = download_page_str.replace("##VERSION##", version)
 download_page_str = download_page_str.replace("##VERSION_WIN##", version_win)
 download_page_str = download_page_str.replace("##VERSION_MAC##", version_mac)

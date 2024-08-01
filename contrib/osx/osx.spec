@@ -11,7 +11,7 @@ PROJECT_ROOT = os.path.abspath(".")
 ICONS_FILE=f"{PROJECT_ROOT}/{PYPKG}/gui/icons/electrum.icns"
 
 
-VERSION = os.environ.get("ELECTRUM_VERSION")
+VERSION = os.environ.get("PYWALLET_VERSION")
 if not VERSION:
     raise Exception('no version')
 

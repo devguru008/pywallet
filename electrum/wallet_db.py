@@ -47,7 +47,7 @@ from .lnutil import LOCAL, REMOTE, HTLCOwner, ChannelType
 from . import json_db
 from .json_db import StoredDict, JsonDB, locked, modifier, StoredObject, stored_in, stored_as
 from .plugin import run_hook, plugin_loaders
-from .version import ELECTRUM_VERSION
+from .version import PYWALLET_VERSION
 
 if TYPE_CHECKING:
     from .storage import WalletStorage
@@ -87,11 +87,11 @@ class TxFeesValue(NamedTuple):
 @attr.s
 class DBMetadata(StoredObject):
     creation_timestamp = attr.ib(default=None, type=int)
-    first_electrum_version_used = attr.ib(default=None, type=str)
+    first_pywallet_version_used = attr.ib(default=None, type=str)
 
     def to_str(self) -> str:
         ts = self.creation_timestamp
-        ver = self.first_electrum_version_used
+        ver = self.first_pywallet_version_used
         if ts is None or ver is None:
             return "unknown"
         date_str = datetime.date.fromtimestamp(ts).isoformat()
@@ -1199,7 +1199,7 @@ class WalletDBUpgrader(Logger):
         if seed_version > FINAL_SEED_VERSION:
             raise WalletFileException('This version of Electrum ({}) is too old to open this wallet.\n'
                                       '(highest supported storage version: {}, version of this file: {})'
-                                      .format(ELECTRUM_VERSION, FINAL_SEED_VERSION, seed_version))
+                                      .format(PYWALLET_VERSION, FINAL_SEED_VERSION, seed_version))
         if seed_version == 14 and self.get('seed_type') == 'segwit':
             self._raise_unsupported_version(seed_version)
         if seed_version == 51 and self._detect_insane_version_51():
@@ -1252,7 +1252,7 @@ def upgrade_wallet_db(data: dict, do_upgrade: bool) -> Tuple[dict, bool]:
         # store this for debugging purposes
         v = DBMetadata(
             creation_timestamp=int(time.time()),
-            first_electrum_version_used=ELECTRUM_VERSION,
+            first_pywallet_version_used=PYWALLET_VERSION,
         )
         assert data.get("db_metadata", None) is None
         data["db_metadata"] = v

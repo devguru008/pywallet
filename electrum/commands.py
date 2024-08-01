@@ -61,7 +61,7 @@ from .lnutil import LnFeatures
 from .lnutil import extract_nodeid
 from .lnpeer import channel_id_from_funding_tx
 from .plugin import run_hook, DeviceMgr, Plugins
-from .version import ELECTRUM_VERSION
+from .version import PYWALLET_VERSION
 from .simple_config import SimpleConfig
 from .invoices import Invoice
 from . import submarine_swaps
@@ -221,7 +221,7 @@ class Commands:
             'spv_nodes': len(self.network.get_interfaces()),
             'connected': self.network.is_connected(),
             'auto_connect': net_params.auto_connect,
-            'version': ELECTRUM_VERSION,
+            'version': PYWALLET_VERSION,
             'default_wallet': self.config.get_wallet_path(),
             'fee_per_kb': self.config.fee_per_kb(),
         }
@@ -598,13 +598,13 @@ class Commands:
     @command('')
     async def version(self):
         """Return the version of Electrum."""
-        return ELECTRUM_VERSION
+        return PYWALLET_VERSION
 
     @command('')
     async def version_info(self):
         """Return information about dependencies, such as their version and path."""
         ret = {
-            "electrum.version": ELECTRUM_VERSION,
+            "electrum.version": PYWALLET_VERSION,
             "electrum.path": os.path.dirname(os.path.realpath(__file__)),
             "python.version": sys.version,
             "python.path": sys.executable,

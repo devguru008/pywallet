@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 # For usage in shell, to get the version of electrum, without needing electrum installed.
-# usage: ./print_electrum_version.py [<attr_name>]
+# usage: ./print_pywallet_version.py [<attr_name>]
 #
 # For example:
-# $ VERSION=$("$CONTRIB"/print_electrum_version.py)
-# $ VERSION=$("$CONTRIB"/print_electrum_version.py APK_VERSION)
+# $ VERSION=$("$CONTRIB"/print_pywallet_version.py)
+# $ VERSION=$("$CONTRIB"/print_pywallet_version.py APK_VERSION)
 # instead of
-# $ VERSION=$(python3 -c "import electrum; print(electrum.version.ELECTRUM_VERSION)")
+# $ VERSION=$(python3 -c "import electrum; print(electrum.version.PYWALLET_VERSION)")
 # $ VERSION=$(python3 -c "import electrum; print(electrum.version.APK_VERSION)")
 
 import importlib.util
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     if len(sys.argv) >= 2:
         attr_name = sys.argv[1]
     else:
-        attr_name = "ELECTRUM_VERSION"
+        attr_name = "PYWALLET_VERSION"
 
     project_root = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     version_file_path = os.path.join(project_root, "electrum", "version.py")

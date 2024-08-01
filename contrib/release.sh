@@ -81,8 +81,8 @@ if [ ! -z "$RELEASEMANAGER" ] ; then
 fi
 
 
-VERSION=$("$CONTRIB"/print_electrum_version.py)
-APK_VERSION=$("$CONTRIB"/print_electrum_version.py APK_VERSION)
+VERSION=$("$CONTRIB"/print_pywallet_version.py)
+APK_VERSION=$("$CONTRIB"/print_pywallet_version.py APK_VERSION)
 info "VERSION: $VERSION"
 info "APK_VERSION: $APK_VERSION"
 REV=$(git describe --tags)

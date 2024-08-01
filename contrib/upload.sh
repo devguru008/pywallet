@@ -16,7 +16,7 @@ fi
 
 cd "$PROJECT_ROOT"
 
-VERSION=$("$CONTRIB"/print_electrum_version.py)
+VERSION=$("$CONTRIB"/print_pywallet_version.py)
 echo "$VERSION"
 
 if [ -z "$ELECBUILD_UPLOADFROM" ]; then

@@ -413,7 +413,7 @@ class ElectrumQmlApplication(QGuiApplication):
         self.context.setContextProperty('MAX', self._maxAmount)
         self.context.setContextProperty('QRIP', self.qr_ip_h)
         self.context.setContextProperty('BUILD', {
-            'electrum_version': version.ELECTRUM_VERSION,
+            'pywallet_version': version.PYWALLET_VERSION,
             'protocol_version': version.PROTOCOL_VERSION,
             'qt_version': QT_VERSION_STR,
             'pyqt_version': PYQT_VERSION_STR

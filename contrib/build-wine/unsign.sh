@@ -18,7 +18,7 @@ rm -rf signed/stripped
 mkdir -p signed >/dev/null 2>&1
 mkdir -p signed/stripped >/dev/null 2>&1
 
-version=$("$CONTRIB"/print_electrum_version.py)
+version=$("$CONTRIB"/print_pywallet_version.py)
 
 echo "Found $(ls dist/*.exe | wc -w) files to verify."
 
