@@ -89,7 +89,6 @@ Check out the code from GitHub:
 ```
 $ git clone https://github.com/devguru008/pywallet.git
 $ cd pywallet
-$ git submodule update --init
 ```
 
 Run install (this should install dependencies):

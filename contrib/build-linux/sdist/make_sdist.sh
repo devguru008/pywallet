@@ -26,7 +26,7 @@ if ([ "$OMIT_UNCLEAN_FILES" != 1 ]); then
     "$CONTRIB"/make_packages.sh || fail "make_packages failed"
 fi
 
-git submodule update --init
+#git submodule update --init
 
 (
     # By default, include both source (.po) and compiled (.mo) locale files in the source dist.

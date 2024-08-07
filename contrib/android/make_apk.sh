@@ -20,9 +20,9 @@ if [ ! -d "$PACKAGES" ]; then
     "$CONTRIB"/make_packages.sh || fail "make_packages failed"
 fi
 
-pushd "$PROJECT_ROOT"
-git submodule update --init
-popd
+#pushd "$PROJECT_ROOT"
+#git submodule update --init
+#popd
 
 # update locale
 info "preparing pywallet-locale."

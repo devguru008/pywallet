@@ -115,7 +115,7 @@ XCB_UTIL_VERSION="acf790d7752f36e450d476ad79807d4012ec863b"
     if ! $(git cat-file -e ${XCB_UTIL_VERSION}) ; then
         info "Could not find requested version $XCB_UTIL_VERSION in local clone; fetching..."
         git fetch --all
-        git submodule update
+        #git submodule update
     fi
     git reset --hard
     git clean -dfxq
@@ -146,7 +146,7 @@ break_legacy_easy_install
 info "preparing pywallet-locale."
 (
     cd "$PROJECT_ROOT"
-    git submodule update --init
+    #git submodule update --init
 
     LOCALE="$PROJECT_ROOT/pywallet/locale/"
     # we want the binary to have only compiled (.mo) locale files; not source (.po) files

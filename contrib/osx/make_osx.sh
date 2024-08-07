@@ -128,7 +128,7 @@ pyinstaller --version
 
 rm -rf ./dist
 
-git submodule update --init
+#git submodule update --init
 
 info "generating locale"
 (

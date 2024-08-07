@@ -331,15 +331,3 @@ task:
         OMIT_UNCLEAN_FILES: 1
   depends_on:
     - "unittests: Tox Python 3.8"
-
-task:
-  name: "check submodules"
-  container:
-    image: python:3.8
-    cpu: 1
-    memory: 1G
-  fetch_script:
-    - git fetch --all --tags
-  check_script:
-    - ./contrib/deterministic-build/check_submodules.sh
-  only_if: $CIRRUS_TAG != ''

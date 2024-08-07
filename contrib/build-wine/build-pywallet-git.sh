@@ -16,7 +16,7 @@ VERSION=$(git describe --tags --dirty --always)
 info "Last commit: $VERSION"
 
 # Load pywallet-locale for this release
-git submodule update --init
+#git submodule update --init
 
 LOCALE="$WINEPREFIX/drive_c/pywallet/pywallet/locale/"
 # we want the binary to have only compiled (.mo) locale files; not source (.po) files
