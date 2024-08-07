@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 os.chdir(project_root)
 
-cmd = "find electrum -type f -name '*.py' -o -name '*.kv'"
+cmd = "find pywallet -type f -name '*.py' -o -name '*.kv'"
 files = subprocess.check_output(cmd, shell=True)
 
 with open("app.fil", "wb") as f:
@@ -22,37 +22,37 @@ with open("app.fil", "wb") as f:
 print("Found {} files to translate".format(len(files.splitlines())))
 
 # Generate fresh translation template
-if not os.path.exists('electrum/locale'):
-    os.mkdir('electrum/locale')
+if not os.path.exists('pywallet/locale'):
+    os.mkdir('pywallet/locale')
 print('Generating template...')
-cmd = 'xgettext -s --from-code UTF-8 --language Python --no-wrap -f app.fil --output=electrum/locale/messages_gettext.pot'
+cmd = 'xgettext -s --from-code UTF-8 --language Python --no-wrap -f app.fil --output=pywallet/locale/messages_gettext.pot'
 subprocess.check_output(cmd, shell=True)
 
 
 # add QML translations
-cmd = "find electrum/gui/qml -type f -name '*.qml'"
+cmd = "find pywallet/gui/qml -type f -name '*.qml'"
 files = subprocess.check_output(cmd, shell=True)
 
-with open("electrum/locale/qml.lst", "wb") as f:
+with open("pywallet/locale/qml.lst", "wb") as f:
     f.write(files)
 
 print("Found {} QML files to translate".format(len(files.splitlines())))
 
-cmd = "lupdate @electrum/locale/qml.lst -ts electrum/locale/qml.ts"
+cmd = "lupdate @pywallet/locale/qml.lst -ts pywallet/locale/qml.ts"
 print('Collecting strings')
 subprocess.check_output(cmd, shell=True)
 
-cmd = "lconvert -of po -o electrum/locale/messages_qml.pot electrum/locale/qml.ts"
+cmd = "lconvert -of po -o pywallet/locale/messages_qml.pot pywallet/locale/qml.ts"
 print('Convert to gettext')
 subprocess.check_output(cmd, shell=True)
 
-cmd = "msgcat -u -o electrum/locale/messages.pot electrum/locale/messages_gettext.pot electrum/locale/messages_qml.pot"
+cmd = "msgcat -u -o pywallet/locale/messages.pot pywallet/locale/messages_gettext.pot pywallet/locale/messages_qml.pot"
 print('Generate template')
 subprocess.check_output(cmd, shell=True)
 
 
 # prepare uploading to crowdin
-os.chdir(os.path.join(project_root, "electrum"))
+os.chdir(os.path.join(project_root, "pywallet"))
 
 crowdin_api_key = None
 
@@ -69,10 +69,10 @@ if not crowdin_api_key:
     sys.exit(0)
 print('Found crowdin_api_key. Will push updated source-strings to crowdin.')
 
-crowdin_project_id = 20482  # for "Electrum" project on crowdin
+crowdin_project_id = 20482  # for "Pywallet" project on crowdin
 locale_file_name = "locale/messages.pot"
 crowdin_file_name = "messages.pot"
-crowdin_file_id = 68  # for "/electrum-client/messages.pot"
+crowdin_file_id = 68  # for "/pywallet-client/messages.pot"
 global_headers = {"Authorization": "Bearer {}".format(crowdin_api_key)}
 
 # client.storages.add_storage(f)

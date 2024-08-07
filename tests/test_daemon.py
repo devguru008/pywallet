@@ -1,21 +1,21 @@
 import os
 from typing import Optional, Iterable
 
-from electrum.commands import Commands
-from electrum.daemon import Daemon
-from electrum.simple_config import SimpleConfig
-from electrum.wallet import restore_wallet_from_text, Abstract_Wallet
-from electrum import util
+from pywallet.commands import Commands
+from pywallet.daemon import Daemon
+from pywallet.simple_config import SimpleConfig
+from pywallet.wallet import restore_wallet_from_text, Abstract_Wallet
+from pywallet import util
 
-from . import ElectrumTestCase, as_testnet
+from . import PywalletTestCase, as_testnet
 
 
-class DaemonTestCase(ElectrumTestCase):
+class DaemonTestCase(PywalletTestCase):
     config: 'SimpleConfig'
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
         self.config.NETWORK_OFFLINE = True
 
         self.wallet_dir = os.path.dirname(self.config.get_wallet_path())

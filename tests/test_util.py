@@ -1,15 +1,15 @@
 from datetime import datetime
 from decimal import Decimal
 
-from electrum import util
-from electrum.util import (format_satoshis, format_fee_satoshis, is_hash256_str, chunks, is_ip_address,
+from pywallet import util
+from pywallet.util import (format_satoshis, format_fee_satoshis, is_hash256_str, chunks, is_ip_address,
                            list_enabled_bits, format_satoshis_plain, is_private_netaddress, is_hex_str,
                            is_integer, is_non_negative_integer, is_int_or_float, is_non_negative_int_or_float)
-from electrum.bip21 import parse_bip21_URI, InvalidBitcoinURI
-from . import ElectrumTestCase, as_testnet
+from pywallet.bip21 import parse_bip21_URI, InvalidBitcoinURI
+from . import PywalletTestCase, as_testnet
 
 
-class TestUtil(ElectrumTestCase):
+class TestUtil(PywalletTestCase):
 
     def test_format_satoshis(self):
         self.assertEqual("0.00001234", format_satoshis(1234))
@@ -113,12 +113,12 @@ class TestUtil(ElectrumTestCase):
 
 
     def test_parse_URI_address_label(self):
-        self._do_test_parse_URI('bitcoin:15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma?label=electrum%20test',
-                                {'address': '15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma', 'label': 'electrum test'})
+        self._do_test_parse_URI('bitcoin:15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma?label=pywallet%20test',
+                                {'address': '15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma', 'label': 'pywallet test'})
 
     def test_parse_URI_address_message(self):
-        self._do_test_parse_URI('bitcoin:15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma?message=electrum%20test',
-                                {'address': '15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma', 'message': 'electrum test', 'memo': 'electrum test'})
+        self._do_test_parse_URI('bitcoin:15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma?message=pywallet%20test',
+                                {'address': '15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma', 'message': 'pywallet test', 'memo': 'pywallet test'})
 
     def test_parse_URI_address_amount(self):
         self._do_test_parse_URI('bitcoin:15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma?amount=0.0003',
@@ -133,8 +133,8 @@ class TestUtil(ElectrumTestCase):
                                 {'address': '15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma', 'test': 'test'})
 
     def test_parse_URI_multiple_args(self):
-        self._do_test_parse_URI('bitcoin:15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma?amount=0.00004&label=electrum-test&message=electrum%20test&test=none&r=http://domain.tld/page',
-                                {'address': '15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma', 'amount': 4000, 'label': 'electrum-test', 'message': u'electrum test', 'memo': u'electrum test', 'r': 'http://domain.tld/page', 'test': 'none'})
+        self._do_test_parse_URI('bitcoin:15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma?amount=0.00004&label=pywallet-test&message=pywallet%20test&test=none&r=http://domain.tld/page',
+                                {'address': '15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma', 'amount': 4000, 'label': 'pywallet-test', 'message': u'pywallet test', 'memo': u'pywallet test', 'r': 'http://domain.tld/page', 'test': 'none'})
 
     def test_parse_URI_no_address_request_url(self):
         self._do_test_parse_URI('bitcoin:?r=http://domain.tld/page?h%3D2a8628fc2fbe',

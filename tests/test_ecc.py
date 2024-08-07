@@ -4,18 +4,18 @@ from ctypes import (
 )
 import io
 
-from electrum import ecc, bitcoin
-from electrum.ecc import ECPubkey, ECPrivkey
-from electrum.ecc_fast import _libsecp256k1
-from electrum import crypto
-from electrum.crypto import sha256
+from pywallet import ecc, bitcoin
+from pywallet.ecc import ECPubkey, ECPrivkey
+from pywallet.ecc_fast import _libsecp256k1
+from pywallet import crypto
+from pywallet.crypto import sha256
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 
 # note: lots of ecc-related tests are in test_bitcoin.py.
 
-class TestSchnorr(ElectrumTestCase):
+class TestSchnorr(PywalletTestCase):
 
     def test_vectors_from_bip0340(self):
         bip0340_vectors = """index,secret key,public key,aux_rand,message,signature,verification result,comment
@@ -118,7 +118,7 @@ class TestSchnorr(ElectrumTestCase):
                              bitcoin.bip340_tagged_hash(tag, msg))
 
 
-class TestEcdsa(ElectrumTestCase):
+class TestEcdsa(PywalletTestCase):
 
     def test_verify_enforces_low_s(self):
         # privkey = ecc.ECPrivkey(bytes.fromhex("d473e2ec218dca8e3508798f01cdfde0135fc79d95526b12e3537fe57e479ac1"))

@@ -1,17 +1,17 @@
-from electrum import SimpleConfig
-from electrum.util import bfh
-from electrum.transaction import PartialTxInput, TxOutpoint
-from electrum.submarine_swaps import SwapManager, SwapData
+from pywallet import SimpleConfig
+from pywallet.util import bfh
+from pywallet.transaction import PartialTxInput, TxOutpoint
+from pywallet.submarine_swaps import SwapManager, SwapData
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 
-class TestSwapTxs(ElectrumTestCase):
+class TestSwapTxs(PywalletTestCase):
     TESTNET = True
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
         self.config.FEE_EST_DYNAMIC = False
         self.config.FEE_EST_STATIC_FEERATE = 1000
 

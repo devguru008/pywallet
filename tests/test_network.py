@@ -2,15 +2,15 @@ import asyncio
 import tempfile
 import unittest
 
-from electrum import constants
-from electrum.simple_config import SimpleConfig
-from electrum import blockchain
-from electrum.interface import Interface, ServerAddr
-from electrum.crypto import sha256
-from electrum.util import OldTaskGroup
-from electrum import util
+from pywallet import constants
+from pywallet.simple_config import SimpleConfig
+from pywallet import blockchain
+from pywallet.interface import Interface, ServerAddr
+from pywallet.crypto import sha256
+from pywallet.util import OldTaskGroup
+from pywallet import util
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 
 class MockNetwork:
@@ -44,7 +44,7 @@ class MockInterface(Interface):
         return
 
 
-class TestNetwork(ElectrumTestCase):
+class TestNetwork(PywalletTestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -58,7 +58,7 @@ class TestNetwork(ElectrumTestCase):
 
     async def asyncSetUp(self):
         await super().asyncSetUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
         self.interface = MockInterface(self.config)
 
     async def test_fork_noconflict(self):

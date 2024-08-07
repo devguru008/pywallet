@@ -2,17 +2,17 @@ from pprint import pprint
 import unittest
 from typing import NamedTuple
 
-from electrum.lnutil import RECEIVED, LOCAL, REMOTE, SENT, HTLCOwner, Direction
-from electrum.lnhtlc import HTLCManager
-from electrum.json_db import StoredDict
+from pywallet.lnutil import RECEIVED, LOCAL, REMOTE, SENT, HTLCOwner, Direction
+from pywallet.lnhtlc import HTLCManager
+from pywallet.json_db import StoredDict
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 class H(NamedTuple):
     owner : str
     htlc_id : int
 
-class TestHTLCManager(ElectrumTestCase):
+class TestHTLCManager(PywalletTestCase):
     def test_adding_htlcs_race(self):
         A = HTLCManager(StoredDict({}, None, []))
         B = HTLCManager(StoredDict({}, None, []))

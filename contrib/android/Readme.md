@@ -1,9 +1,9 @@
 # Qml GUI
 
-The Qml GUI is used with Electrum on Android devices, since Electrum 4.4.
+The Qml GUI is used with Pywallet on Android devices, since Pywallet 4.4.
 To generate an APK file, follow these instructions.
 
-(note: older versions of Electrum for Android used the "kivy" GUI)
+(note: older versions of Pywallet for Android used the "kivy" GUI)
 
 ## Android binary with Docker
 
@@ -50,7 +50,7 @@ repository.
    You can use the `apkdiff.py` python script (written by the Signal developers) to compare
    the two binaries.
     ```
-    $ python3 contrib/android/apkdiff.py Electrum_apk_that_you_built.apk Electrum_apk_official_release.apk
+    $ python3 contrib/android/apkdiff.py Pywallet_apk_that_you_built.apk Pywallet_apk_official_release.apk
     ```
    This should output `APKs match!`.
 
@@ -64,7 +64,7 @@ You probably need to clear the cache: `rm -rf .buildozer/android/platform/build-
 ### How do I deploy on connected phone for quick testing?
 Assuming `adb` is installed:
 ```
-$ adb -d install -r dist/Electrum-*-arm64-v8a-debug.apk
+$ adb -d install -r dist/Pywallet-*-arm64-v8a-debug.apk
 $ adb shell monkey -p co.caprifin.pywallet 1
 ```
 
@@ -100,7 +100,7 @@ Install requirements:
 python3 -m pip install ".[qml_gui]"
 ```
 
-Run electrum with the `-g` switch: `electrum -g qml`
+Run electrum with the `-g` switch: `pywallet -g qml`
 
 Notes:
 
@@ -144,7 +144,7 @@ To push a file:
 $ adb push ~/wspace/tmp/my_wallet /data/local/tmp
 $ adb shell
 adb$ ls -la /data/local/tmp
-adb$ run-as org.electrum.testnet.electrum cp /data/local/tmp/my_wallet /data/data/org.electrum.testnet.electrum/files/data/testnet/wallets/
+adb$ run-as org.pywallet.testnet.pywallet cp /data/local/tmp/my_wallet /data/data/org.pywallet.testnet.pywallet/files/data/testnet/wallets/
 adb$ rm /data/local/tmp/my_wallet
 ```
 
@@ -153,11 +153,11 @@ Or use Android Studio: "Device File Explorer", which can download/upload data di
 ### How to investigate diff between binaries if reproducibility fails?
 ```
 cd dist/
-unzip Electrum-*.apk1 -d apk1
+unzip Pywallet-*.apk1 -d apk1
 mkdir apk1/assets/private_mp3/
 tar -xzvf apk1/assets/private.tar --directory apk1/assets/private_mp3/
 
-unzip Electrum-*.apk2 -d apk2
+unzip Pywallet-*.apk2 -d apk2
 mkdir apk2/assets/private_mp3/
 tar -xzvf apk2/assets/private.tar --directory apk2/assets/private_mp3/
 
@@ -178,7 +178,7 @@ Click "View more details on Cirrus CI" to get to cirrus' website, and search for
 The apk is built in `debug` mode, and is signed using an ephemeral RSA key.
 
 For tech demo purposes, you can directly install this apk on your phone.
-However, if you already have electrum installed on your phone, Android's TOFU signing model
+However, if you already have pywallet installed on your phone, Android's TOFU signing model
 will not let you upgrade that to the CI apk due to mismatching signing keys. As the CI key
 is ephemeral, it is not even possible to upgrade from an older CI apk to a newer CI apk.
 
@@ -186,5 +186,5 @@ However, it is possible to resign the apk manually with one's own key, using
 e.g. [`apksigner`](https://developer.android.com/studio/command-line/apksigner),
 mutating the apk in place, after which it should be possible to upgrade:
 ```
-apksigner sign --ks ~/wspace/electrum/contrib/android/android_debug.keystore Electrum-*-arm64-v8a-debug.apk
+apksigner sign --ks ~/wspace/pywallet/contrib/android/android_debug.keystore Pywallet-*-arm64-v8a-debug.apk
 ```

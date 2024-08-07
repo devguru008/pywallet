@@ -19,7 +19,7 @@
 #
 # Note: steps before doing a new release:
 # - update locale:
-#     1. cd /opt/electrum-locale && ./update.py && git push
+#     1. cd /opt/pywallet-locale && ./update.py && git push
 #     2. cd to the submodule dir, and git pull
 #     3. cd .. && git push
 # - update RELEASE-NOTES and version.py
@@ -101,7 +101,7 @@ fi
 set -x
 
 # create tarball
-tarball="Electrum-$VERSION.tar.gz"
+tarball="Pywallet-$VERSION.tar.gz"
 if test -f "dist/$tarball"; then
     info "file exists: $tarball"
 else
@@ -109,7 +109,7 @@ else
 fi
 
 # create source-only tarball
-srctarball="Electrum-sourceonly-$VERSION.tar.gz"
+srctarball="Pywallet-sourceonly-$VERSION.tar.gz"
 if test -f "dist/$srctarball"; then
     info "file exists: $srctarball"
 else
@@ -117,7 +117,7 @@ else
 fi
 
 # appimage
-appimage="electrum-$REV-x86_64.AppImage"
+appimage="pywallet-$REV-x86_64.AppImage"
 if test -f "dist/$appimage"; then
     info "file exists: $appimage"
 else
@@ -126,9 +126,9 @@ fi
 
 
 # windows
-win1="electrum-$REV.exe"
-win2="electrum-$REV-portable.exe"
-win3="electrum-$REV-setup.exe"
+win1="pywallet-$REV.exe"
+win2="pywallet-$REV-portable.exe"
+win3="pywallet-$REV-setup.exe"
 if test -f "dist/$win1"; then
     info "file exists: $win1"
 else
@@ -149,13 +149,13 @@ else
 fi
 
 # android
-apk1="Electrum-$APK_VERSION-armeabi-v7a-release.apk"
-apk2="Electrum-$APK_VERSION-arm64-v8a-release.apk"
-apk3="Electrum-$APK_VERSION-x86_64-release.apk"
+apk1="Pywallet-$APK_VERSION-armeabi-v7a-release.apk"
+apk2="Pywallet-$APK_VERSION-arm64-v8a-release.apk"
+apk3="Pywallet-$APK_VERSION-x86_64-release.apk"
 for arch in armeabi-v7a arm64-v8a x86_64
 do
-    apk="Electrum-$APK_VERSION-$arch-release.apk"
-    apk_unsigned="Electrum-$APK_VERSION-$arch-release-unsigned.apk"
+    apk="Pywallet-$APK_VERSION-$arch-release.apk"
+    apk_unsigned="Pywallet-$APK_VERSION-$arch-release-unsigned.apk"
     if test -f "dist/$apk"; then
         info "file exists: $apk"
     else
@@ -171,7 +171,7 @@ done
 
 # the macos binary is built on a separate machine.
 # the file that needs to be copied over is the codesigned release binary (regardless of builder role)
-dmg="electrum-$VERSION.dmg"
+dmg="pywallet-$VERSION.dmg"
 if ! test -f "dist/$dmg"; then
     if [ ! -z "$RELEASEMANAGER" ] ; then  # RM
         fail "dmg is missing, aborting. Please build and codesign the dmg on a mac and copy it over."
@@ -212,7 +212,7 @@ if [ -z "$RELEASEMANAGER" ] ; then
     cd "$PROJECT_ROOT/dist/releasemanager"
     # TODO check somehow that RM had finished uploading
     sftp -oBatchMode=no -b - "$SSHUSER@uploadserver" << !
-       cd electrum-downloads-airlock
+       cd pywallet-downloads-airlock
        cd "$VERSION"
        mget *
        bye

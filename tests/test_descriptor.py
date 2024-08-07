@@ -1,5 +1,5 @@
 # Copyright (c) 2018-2023 The HWI developers
-# Copyright (c) 2023 The Electrum developers
+# Copyright (c) 2023 The Pywallet developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
@@ -8,7 +8,7 @@
 from binascii import unhexlify
 import unittest
 
-from electrum.descriptor import (
+from pywallet.descriptor import (
     parse_descriptor,
     MultisigDescriptor,
     SHDescriptor,
@@ -18,13 +18,13 @@ from electrum.descriptor import (
     WSHDescriptor,
     PubkeyProvider,
 )
-from electrum import ecc
-from electrum.util import bfh
+from pywallet import ecc
+from pywallet.util import bfh
 
-from . import ElectrumTestCase, as_testnet
+from . import PywalletTestCase, as_testnet
 
 
-class TestDescriptor(ElectrumTestCase):
+class TestDescriptor(PywalletTestCase):
 
     @as_testnet
     def test_parse_descriptor_with_origin(self):

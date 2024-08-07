@@ -1,17 +1,17 @@
 import shutil
 import tempfile
 
-from electrum import SimpleConfig
-from electrum.gui.qml.qetypes import QEAmount
-from electrum.invoices import Invoice, LN_EXPIRY_NEVER
+from pywallet import SimpleConfig
+from pywallet.gui.qml.qetypes import QEAmount
+from pywallet.invoices import Invoice, LN_EXPIRY_NEVER
 from tests.qt_util import QETestCase, QEventReceiver, qt_test
-from electrum.transaction import PartialTxOutput
+from pywallet.transaction import PartialTxOutput
 
 
 class WalletMock:
-    def __init__(self, electrum_path):
+    def __init__(self, pywallet_path):
         self.config = SimpleConfig({
-            'electrum_path': electrum_path,
+            'pywallet_path': pywallet_path,
             'decimal_point': 5
         })
         self.contacts = None
@@ -21,12 +21,12 @@ class TestTypes(QETestCase):
 
     def setUp(self):
         super().setUp()
-        self.electrum_path = tempfile.mkdtemp()
-        self.wallet = WalletMock(self.electrum_path)
+        self.pywallet_path = tempfile.mkdtemp()
+        self.wallet = WalletMock(self.pywallet_path)
 
     def tearDown(self):
         super().tearDown()
-        shutil.rmtree(self.electrum_path)
+        shutil.rmtree(self.pywallet_path)
 
     @qt_test
     def test_qeamount(self):

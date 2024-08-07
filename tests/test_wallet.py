@@ -8,22 +8,22 @@ import time
 from io import StringIO
 import asyncio
 
-from electrum.storage import WalletStorage
-from electrum.wallet_db import FINAL_SEED_VERSION
-from electrum.wallet import (Abstract_Wallet, Standard_Wallet, create_new_wallet,
+from pywallet.storage import WalletStorage
+from pywallet.wallet_db import FINAL_SEED_VERSION
+from pywallet.wallet import (Abstract_Wallet, Standard_Wallet, create_new_wallet,
                              restore_wallet_from_text, Imported_Wallet, Wallet)
-from electrum.exchange_rate import ExchangeBase, FxThread
-from electrum.util import TxMinedInfo, InvalidPassword
-from electrum.bitcoin import COIN
-from electrum.wallet_db import WalletDB, JsonDB
-from electrum.simple_config import SimpleConfig
-from electrum import util
-from electrum.daemon import Daemon
-from electrum.invoices import PR_UNPAID, PR_PAID, PR_UNCONFIRMED
-from electrum.transaction import tx_from_any
-from electrum.address_synchronizer import TX_HEIGHT_UNCONFIRMED
+from pywallet.exchange_rate import ExchangeBase, FxThread
+from pywallet.util import TxMinedInfo, InvalidPassword
+from pywallet.bitcoin import COIN
+from pywallet.wallet_db import WalletDB, JsonDB
+from pywallet.simple_config import SimpleConfig
+from pywallet import util
+from pywallet.daemon import Daemon
+from pywallet.invoices import PR_UNPAID, PR_PAID, PR_UNCONFIRMED
+from pywallet.transaction import tx_from_any
+from pywallet.address_synchronizer import TX_HEIGHT_UNCONFIRMED
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 
 class FakeSynchronizer(object):
@@ -36,13 +36,13 @@ class FakeSynchronizer(object):
         self.store.append(address)
 
 
-class WalletTestCase(ElectrumTestCase):
+class WalletTestCase(PywalletTestCase):
 
     def setUp(self):
         super(WalletTestCase, self).setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
-        self.wallet_path = os.path.join(self.electrum_path, "somewallet")
+        self.wallet_path = os.path.join(self.pywallet_path, "somewallet")
 
         self._saved_stdout = sys.stdout
         self._stdout_buffer = StringIO()
@@ -181,7 +181,7 @@ class FakeWallet:
 txid = 'abc'
 ccy = 'TEST'
 
-class TestFiat(ElectrumTestCase):
+class TestFiat(PywalletTestCase):
     def setUp(self):
         super().setUp()
         self.value_sat = COIN
@@ -273,7 +273,7 @@ class TestCreateRestoreWallet(WalletTestCase):
         self.assertEqual(text, wallet.keystore.get_master_public_key())
         self.assertEqual('bc1q2ccr34wzep58d4239tl3x3734ttle92a8srmuw', wallet.get_receiving_addresses()[0])
 
-    async def test_restore_wallet_from_text_xkey_that_is_also_a_valid_electrum_seed_by_chance(self):
+    async def test_restore_wallet_from_text_xkey_that_is_also_a_valid_pywallet_seed_by_chance(self):
         text = 'yprvAJBpuoF4FKpK92ofzQ7ge6VJMtorow3maAGPvPGj38ggr2xd1xCrC9ojUVEf9jhW5L9SPu6fU2U3o64cLrRQ83zaQGNa6YP3ajZS6hHNPXj'
         d = restore_wallet_from_text(text, path=self.wallet_path, gap_limit=1, config=self.config)
         wallet = d['wallet']  # type: Standard_Wallet

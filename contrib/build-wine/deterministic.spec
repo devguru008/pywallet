@@ -4,12 +4,12 @@ from PyInstaller.utils.hooks import collect_data_files, collect_submodules, coll
 
 import sys, os
 
-PYPKG="electrum"
+PYPKG="pywallet"
 MAIN_SCRIPT="run_pywallet"
-PROJECT_ROOT = "C:/electrum"
+PROJECT_ROOT = "C:/pywallet"
 ICONS_FILE=f"{PROJECT_ROOT}/{PYPKG}/gui/icons/pywallet.ico"
 
-cmdline_name = os.environ.get("ELECTRUM_CMDLINE_NAME")
+cmdline_name = os.environ.get("PYWALLET_CMDLINE_NAME")
 if not cmdline_name:
     raise Exception('no name')
 
@@ -114,7 +114,7 @@ exe_standalone = EXE(
     upx=False,
     icon=ICONS_FILE,
     console=False)
-    # console=True makes an annoying black box pop up, but it does make Electrum output command line commands, with this turned off no output will be given but commands can still be used
+    # console=True makes an annoying black box pop up, but it does make Pywallet output command line commands, with this turned off no output will be given but commands can still be used
 
 exe_portable = EXE(
     pyz,

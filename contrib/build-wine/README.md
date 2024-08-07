@@ -32,10 +32,10 @@ similar system.
 
 ## Code Signing
 
-Electrum Windows builds are signed with a Microsoft Authenticode™ code signing
+Pywallet Windows builds are signed with a Microsoft Authenticode™ code signing
 certificate in addition to the GPG-based signatures.
 
-The advantage of using Authenticode is that Electrum users won't receive a
+The advantage of using Authenticode is that Pywallet users won't receive a
 Windows SmartScreen warning when starting it.
 
 The release signing procedure involves a signer (the holder of the
@@ -53,7 +53,7 @@ certificate/key) and one or multiple trusted verifiers:
 
 | Signer and verifiers:                                                                            |
 |--------------------------------------------------------------------------------------------------|
-| Upload signatures to 'electrum-signatures' repo, as `$version/$filename.$builder.asc`            |
+| Upload signatures to 'pywallet-signatures' repo, as `$version/$filename.$builder.asc`            |
 
 
 
@@ -79,13 +79,13 @@ The script `unsign.sh` performs these steps.
 `pyi-archive_viewer` is needed, for that run `$ pip install pyinstaller`.
 As a first pass overview, run:
 ```
-pyi-archive_viewer -l electrum-*.exe1 > f1
-pyi-archive_viewer -l electrum-*.exe2 > f2
+pyi-archive_viewer -l pywallet-*.exe1 > f1
+pyi-archive_viewer -l pywallet-*.exe2 > f2
 diff f1 f2 > d
 cat d
 ```
 Then investigate manually:
 ```
-$ pyi-archive_viewer electrum-*.exe1
+$ pyi-archive_viewer pywallet-*.exe1
 ? help
 ```

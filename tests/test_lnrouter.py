@@ -5,18 +5,18 @@ import shutil
 import asyncio
 from typing import Optional
 
-from electrum import util
-from electrum.util import bfh
-from electrum.lnutil import ShortChannelID
-from electrum.lnonion import (OnionHopsDataSingle, new_onion_packet,
+from pywallet import util
+from pywallet.util import bfh
+from pywallet.lnutil import ShortChannelID
+from pywallet.lnonion import (OnionHopsDataSingle, new_onion_packet,
                               process_onion_packet, _decode_onion_error, decode_onion_error,
                               OnionFailureCode, OnionPacket)
-from electrum import bitcoin, lnrouter
-from electrum.constants import BitcoinTestnet
-from electrum.simple_config import SimpleConfig
-from electrum.lnrouter import PathEdge, LiquidityHintMgr, DEFAULT_PENALTY_PROPORTIONAL_MILLIONTH, DEFAULT_PENALTY_BASE_MSAT, fee_for_edge_msat
+from pywallet import bitcoin, lnrouter
+from pywallet.constants import BitcoinTestnet
+from pywallet.simple_config import SimpleConfig
+from pywallet.lnrouter import PathEdge, LiquidityHintMgr, DEFAULT_PENALTY_PROPORTIONAL_MILLIONTH, DEFAULT_PENALTY_BASE_MSAT, fee_for_edge_msat
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 from .test_bitcoin import needs_test_with_all_chacha20_implementations
 
 
@@ -28,14 +28,14 @@ def node(character: str) -> bytes:
     return b'\x02' + f'{character}'.encode() * 32
 
 
-class Test_LNRouter(ElectrumTestCase):
+class Test_LNRouter(PywalletTestCase):
     TESTNET = True
 
     cdb = None  # type: Optional[lnrouter.ChannelDB]
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
         self.assertIsNone(self.cdb)  # sanity-check side effects from previous tests
 
     async def asyncTearDown(self):

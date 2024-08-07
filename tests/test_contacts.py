@@ -1,19 +1,19 @@
 import os
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
-from electrum.simple_config import SimpleConfig
-from electrum.wallet import restore_wallet_from_text, Abstract_Wallet
-from electrum.daemon import Daemon
+from pywallet.simple_config import SimpleConfig
+from pywallet.wallet import restore_wallet_from_text, Abstract_Wallet
+from pywallet.daemon import Daemon
 
 
-class TestContacts(ElectrumTestCase):
+class TestContacts(PywalletTestCase):
     TESTNET = True
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
-        self.wallet_path = os.path.join(self.electrum_path, "somewallet1")
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
+        self.wallet_path = os.path.join(self.pywallet_path, "somewallet1")
 
     async def test_saving_contacts(self):
         text = 'cross end slow expose giraffe fuel track awake turtle capital ranch pulp'

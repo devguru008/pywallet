@@ -6,23 +6,23 @@ from typing import Sequence
 import asyncio
 import copy
 
-from electrum import storage, bitcoin, keystore, bip32, slip39, wallet
-from electrum import Transaction
-from electrum import SimpleConfig
-from electrum import util
-from electrum.address_synchronizer import TX_HEIGHT_UNCONFIRMED, TX_HEIGHT_UNCONF_PARENT
-from electrum.wallet import (sweep, Multisig_Wallet, Standard_Wallet, Imported_Wallet,
+from pywallet import storage, bitcoin, keystore, bip32, slip39, wallet
+from pywallet import Transaction
+from pywallet import SimpleConfig
+from pywallet import util
+from pywallet.address_synchronizer import TX_HEIGHT_UNCONFIRMED, TX_HEIGHT_UNCONF_PARENT
+from pywallet.wallet import (sweep, Multisig_Wallet, Standard_Wallet, Imported_Wallet,
                              restore_wallet_from_text, Abstract_Wallet, CannotBumpFee, BumpFeeStrategy,
                              TransactionPotentiallyDangerousException, TransactionDangerousException,
                              TxSighashRiskLevel)
-from electrum.util import bfh, NotEnoughFunds, UnrelatedTransactionException, UserFacingException
-from electrum.transaction import Transaction, PartialTxOutput, tx_from_any, Sighash
-from electrum.mnemonic import calc_seed_type
-from electrum.network import Network
+from pywallet.util import bfh, NotEnoughFunds, UnrelatedTransactionException, UserFacingException
+from pywallet.transaction import Transaction, PartialTxOutput, tx_from_any, Sighash
+from pywallet.mnemonic import calc_seed_type
+from pywallet.network import Network
 
-from electrum.plugins.trustedcoin import trustedcoin
+from pywallet.plugins.trustedcoin import trustedcoin
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 
 UNICODE_HORROR_HEX = 'e282bf20f09f988020f09f98882020202020e3818620e38191e3819fe381be20e3828fe3828b2077cda2cda2cd9d68cda16fcda2cda120ccb8cda26bccb5cd9f6eccb4cd98c7ab77ccb8cc9b73cd9820cc80cc8177cd98cda2e1b8a9ccb561d289cca1cda27420cca7cc9568cc816fccb572cd8fccb5726f7273cca120ccb6cda1cda06cc4afccb665cd9fcd9f20ccb6cd9d696ecda220cd8f74cc9568ccb7cca1cd9f6520cd9fcd9f64cc9b61cd9c72cc95cda16bcca2cca820cda168ccb465cd8f61ccb7cca2cca17274cc81cd8f20ccb4ccb7cda0c3b2ccb5ccb666ccb82075cca7cd986ec3adcc9bcd9c63cda2cd8f6fccb7cd8f64ccb8cda265cca1cd9d3fcd9e'
@@ -82,14 +82,14 @@ class WalletIntegrityHelper:
         return w
 
 
-class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
+class TestWalletKeystoreAddressIntegrityForMainnet(PywalletTestCase):
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_seed_standard(self, mock_save_db):
+    async def test_pywallet_seed_standard(self, mock_save_db):
         seed_words = 'cycle rocket west magnet parrot shuffle foot correct salt library feed song'
         self.assertEqual(calc_seed_type(seed_words), 'standard')
 
@@ -108,7 +108,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(w.get_change_addresses()[0], '1KSezYMhAJMWqFbVFB2JshYg69UpmEXR4D')
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_seed_segwit(self, mock_save_db):
+    async def test_pywallet_seed_segwit(self, mock_save_db):
         seed_words = 'bitter grass shiver impose acquire brush forget axis eager alone wine silver'
         self.assertEqual(calc_seed_type(seed_words), 'segwit')
 
@@ -130,7 +130,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
                          ks.get_lightning_xprv(None))
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_seed_segwit_passphrase(self, mock_save_db):
+    async def test_pywallet_seed_segwit_passphrase(self, mock_save_db):
         seed_words = 'bitter grass shiver impose acquire brush forget axis eager alone wine silver'
         self.assertEqual(calc_seed_type(seed_words), 'segwit')
 
@@ -152,7 +152,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
                          ks.get_lightning_xprv(None))
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_seed_old(self, mock_save_db):
+    async def test_pywallet_seed_old(self, mock_save_db):
         seed_words = 'powerful random nobody notice nothing important anyway look away hidden message over'
         self.assertEqual(calc_seed_type(seed_words), 'old')
 
@@ -170,7 +170,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(w.get_change_addresses()[0], '1KRW8pH6HFHZh889VDq6fEKvmrsmApwNfe')
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_seed_2fa_legacy_pre27_25words(self, mock_save_db):
+    async def test_pywallet_seed_2fa_legacy_pre27_25words(self, mock_save_db):
         # pre-version-2.7 2fa seed, containing 25 words
         seed_words = 'bind clever room kidney crucial sausage spy edit canvas soul liquid ribbon slam open alpha suffer gate relax voice carpet law hill woman tonight abstract'
         assert len(seed_words.split()) == 25
@@ -206,7 +206,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(w.get_change_addresses()[0], '3Ke6pKrmtSyyQaMob1ES4pk8siAAkRmst9')
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_seed_2fa_legacy_pre27_24words(self, mock_save_db):
+    async def test_pywallet_seed_2fa_legacy_pre27_24words(self, mock_save_db):
         # pre-version-2.7 2fa seed, containing 24 words
         seed_words = 'sibling leg cable timber patient foot occur plate travel finger chef scale radio citizen promote immune must chef fluid sea sphere common acid lab'
         assert len(seed_words.split()) == 24
@@ -242,7 +242,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(w.get_change_addresses()[0], '3PKtHrjiKdsZ73ULZ4Sf1vDBnrUoAEtLDe')
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_seed_2fa_legacy_post27(self, mock_save_db):
+    async def test_pywallet_seed_2fa_legacy_post27(self, mock_save_db):
         # post-version-2.7 2fa seed
         seed_words = 'kiss live scene rude gate step hip quarter bunker oxygen motor glove'
         self.assertEqual(calc_seed_type(seed_words), '2fa')
@@ -277,7 +277,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(w.get_change_addresses()[0], '3PeZEcumRqHSPNN43hd4yskGEBdzXgY8Cy')
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_seed_2fa_segwit(self, mock_save_db):
+    async def test_pywallet_seed_2fa_segwit(self, mock_save_db):
         seed_words = 'universe topic remind silver february ranch shine worth innocent cattle enhance wise'
         self.assertEqual(calc_seed_type(seed_words), '2fa_segwit')
 
@@ -388,7 +388,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(w.get_change_addresses()[0], 'bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el')
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_multisig_seed_standard(self, mock_save_db):
+    async def test_pywallet_multisig_seed_standard(self, mock_save_db):
         seed_words = 'blast uniform dragon fiscal ensure vast young utility dinosaur abandon rookie sure'
         self.assertEqual(calc_seed_type(seed_words), 'standard')
 
@@ -398,7 +398,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(ks1.xprv, 'xprv9s21ZrQH143K3t9vo23J3hajRbzvkRLJ6Y1zFrUFAfU3t8oooMPfb7f87cn5KntgqZs5nipZkCiBFo5ZtaSD2eDo7j7CMuFV8Zu6GYLTpY6')
         self.assertEqual(ks1.xpub, 'xpub661MyMwAqRbcGNEPu3aJQqXTydqR9t49Tkwb4Esrj112kw8xLthv8uybxvaki4Ygt9xiwZUQGeFTG7T2TUzR3eA4Zp3aq5RXsABHFBUrq4c')
 
-        # electrum seed: ghost into match ivory badge robot record tackle radar elbow traffic loud
+        # pywallet seed: ghost into match ivory badge robot record tackle radar elbow traffic loud
         ks2 = keystore.from_xpub('xpub661MyMwAqRbcGfCPEkkyo5WmcrhTq8mi3xuBS7VEZ3LYvsgY1cCFDbenT33bdD12axvrmXhuX3xkAbKci3yZY9ZEk8vhLic7KNhLjqdh5ec')
         WalletIntegrityHelper.check_xpub_keystore_sanity(self, ks2)
         self.assertTrue(isinstance(ks2, keystore.BIP32_KeyStore))
@@ -410,7 +410,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(w.get_change_addresses()[0], '36XWwEHrrVCLnhjK5MrVVGmUHghr9oWTN1')
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_electrum_multisig_seed_segwit(self, mock_save_db):
+    async def test_pywallet_multisig_seed_segwit(self, mock_save_db):
         seed_words = 'snow nest raise royal more walk demise rotate smooth spirit canyon gun'
         self.assertEqual(calc_seed_type(seed_words), 'segwit')
 
@@ -420,7 +420,7 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(ks1.xprv, 'ZprvAjxLRqPiDfPDxXrm8JvcoCGRAW6xUtktucG6AMtdzaEbTEJN8qcECvujfhtDU3jLJ9g3Dr3Gz5m1ypfMs8iSUh62gWyHZ73bYLRWyeHf6y4')
         self.assertEqual(ks1.xpub, 'Zpub6xwgqLvc42wXB1wEELTdALD9iXwStMUkGqBgxkJFYumaL2dWgNvUkjEDWyDFZD3fZuDWDzd1KQJ4NwVHS7hs6H6QkpNYSShfNiUZsgMdtNg')
 
-        # electrum seed: hedgehog sunset update estate number jungle amount piano friend donate upper wool
+        # pywallet seed: hedgehog sunset update estate number jungle amount piano friend donate upper wool
         ks2 = keystore.from_xpub('Zpub6y4oYeETXAbzLNg45wcFDGwEG3vpgsyMJybiAfi2pJtNF3i3fJVxK2BeZJaw7VeKZm192QHvXP3uHDNpNmNDbQft9FiMzkKUhNXQafUMYUY')
         WalletIntegrityHelper.check_xpub_keystore_sanity(self, ks2)
         self.assertTrue(isinstance(ks2, keystore.BIP32_KeyStore))
@@ -757,12 +757,12 @@ class TestWalletKeystoreAddressIntegrityForMainnet(ElectrumTestCase):
         self.assertEqual(w.get_receiving_addresses()[0], '3JDN4wF5BphZqcJFFYuDA7N1apzfPYyJLG')
         self.assertEqual(w.get_change_addresses()[0], '3J8zNvhJndqzBcuPuarzUn1kWs9N4ZY7HS')
 
-class TestWalletKeystoreAddressIntegrityForTestnet(ElectrumTestCase):
+class TestWalletKeystoreAddressIntegrityForTestnet(PywalletTestCase):
     TESTNET = True
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
     async def test_bip39_multisig_seed_p2sh_segwit_testnet(self, mock_save_db):
@@ -845,12 +845,12 @@ class TestWalletKeystoreAddressIntegrityForTestnet(ElectrumTestCase):
         self.assertEqual(w.get_change_addresses()[0], 'tb1q0fj5mra96hhnum80kllklc52zqn6kppt3hyzr49yhr3ecr42z3ts5777jl')
 
 
-class TestWalletSending(ElectrumTestCase):
+class TestWalletSending(PywalletTestCase):
     TESTNET = True
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     def create_standard_wallet_from_seed(self, seed_words, *, config=None, gap_limit=2):
         if config is None:
@@ -1187,7 +1187,7 @@ class TestWalletSending(ElectrumTestCase):
         class TmpConfig(tempfile.TemporaryDirectory):  # to avoid sub-tests side-effecting each other
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
-                self.config = SimpleConfig({'electrum_path': self.name})
+                self.config = SimpleConfig({'pywallet_path': self.name})
                 self.config.WALLET_COIN_CHOOSER_OUTPUT_ROUNDING = False
             def __enter__(self):
                 return self.config
@@ -2299,7 +2299,7 @@ class TestWalletSending(ElectrumTestCase):
         self.assertEqual('b062d2e19880c66b36e80b823c2d00a2769658d1e574ff854dab15efd8fd7da8', tx_copy.wtxid())
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_coinjoin_between_two_p2wpkh_electrum_seeds(self, mock_save_db):
+    async def test_coinjoin_between_two_p2wpkh_pywallet_seeds(self, mock_save_db):
         wallet1 = WalletIntegrityHelper.create_standard_wallet(
             keystore.from_seed('humor argue expand gain goat shiver remove morning security casual leopard degree', passphrase=''),
             gap_limit=2,
@@ -2437,7 +2437,7 @@ class TestWalletSending(ElectrumTestCase):
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
     async def test_dscancel(self, mock_save_db):
         self.maxDiff = None
-        config = SimpleConfig({'electrum_path': self.electrum_path})
+        config = SimpleConfig({'pywallet_path': self.pywallet_path})
         config.WALLET_COIN_CHOOSER_OUTPUT_ROUNDING = False
 
         for simulate_moving_txs in (False, True):
@@ -3198,15 +3198,15 @@ class TestWalletSending(ElectrumTestCase):
         self.assertTrue(tx.is_complete())
 
 
-class TestWalletOfflineSigning(ElectrumTestCase):
+class TestWalletOfflineSigning(PywalletTestCase):
     TESTNET = True
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
-    async def test_sending_offline_old_electrum_seed_online_mpk(self, mock_save_db):
+    async def test_sending_offline_old_pywallet_seed_online_mpk(self, mock_save_db):
         wallet_offline = WalletIntegrityHelper.create_standard_wallet(
             keystore.from_seed('alone body father children lead goodbye phone twist exist grass kick join', passphrase='', for_multisig=False),
             gap_limit=4,
@@ -3920,12 +3920,12 @@ class TestWalletOfflineSigning(ElectrumTestCase):
         self.assertEqual('4376fa5f1f6cb37b1f3956175d3bd4ef6882169294802b250a3c672f3ff431c1', tx.wtxid())
 
 
-class TestWalletCreationChecks(ElectrumTestCase):
+class TestWalletCreationChecks(PywalletTestCase):
     TESTNET = True
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
     async def test_duplicate_masterkeys_in_multisig(self, mock_save_db):
@@ -4012,7 +4012,7 @@ class TestWalletCreationChecks(ElectrumTestCase):
         self.assertIn('unexpected keystore type', ctx4.exception.args[0])
 
 
-class TestWalletHistory_SimpleRandomOrder(ElectrumTestCase):
+class TestWalletHistory_SimpleRandomOrder(PywalletTestCase):
     TESTNET = True
     transactions = {
         "0f4972c84974b908a58dda2614b68cf037e6c03e8291898c719766f213217b67": "01000000029d1bdbe67f0bd0d7bd700463f5c29302057c7b52d47de9e2ca5069761e139da2000000008b483045022100a146a2078a318c1266e42265a369a8eef8993750cb3faa8dd80754d8d541d5d202207a6ab8864986919fd1a7fd5854f1e18a8a0431df924d7a878ec3dc283e3d75340141045f7ba332df2a7b4f5d13f246e307c9174cfa9b8b05f3b83410a3c23ef8958d610be285963d67c7bc1feb082f168fa9877c25999963ff8b56b242a852b23e25edfeffffff9d1bdbe67f0bd0d7bd700463f5c29302057c7b52d47de9e2ca5069761e139da2010000008a47304402201c7fa37b74a915668b0244c01f14a9756bbbec1031fb69390bcba236148ab37e02206151581f9aa0e6758b503064c1e661a726d75c6be3364a5a121a8c12cf618f64014104dc28da82e141416aaf771eb78128d00a55fdcbd13622afcbb7a3b911e58baa6a99841bfb7b99bcb7e1d47904fda5d13fdf9675cdbbe73e44efcc08165f49bac6feffffff02b0183101000000001976a914ca14915184a2662b5d1505ce7142c8ca066c70e288ac005a6202000000001976a9145eb4eeaefcf9a709f8671444933243fbd05366a388ac54c51200",
@@ -4039,7 +4039,7 @@ class TestWalletHistory_SimpleRandomOrder(ElectrumTestCase):
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     def create_old_wallet(self):
         ks = keystore.from_old_mpk('e9d4b7866dd1e91c862aebf62a49548c7dbf7bcc6e4b7b8c9da820c7737968df9c09d5a3e271dc814a29981f81b3faaf2737b551ef5dcc6189cf0f8252c442b3')
@@ -4074,7 +4074,7 @@ class TestWalletHistory_SimpleRandomOrder(ElectrumTestCase):
         self.assertEqual(27633300, sum(w.get_balance()))
 
 
-class TestWalletHistory_EvilGapLimit(ElectrumTestCase):
+class TestWalletHistory_EvilGapLimit(PywalletTestCase):
     TESTNET = True
     transactions = {
         # txn A:
@@ -4088,7 +4088,7 @@ class TestWalletHistory_EvilGapLimit(ElectrumTestCase):
     def setUp(self):
         super().setUp()
         self.config = SimpleConfig({
-            'electrum_path': self.electrum_path,
+            'pywallet_path': self.pywallet_path,
         })
         self.config.NETWORK_SKIPMERKLECHECK = True  # needed for Synchronizer to generate new addresses without SPV
 
@@ -4132,7 +4132,7 @@ class TestWalletHistory_EvilGapLimit(ElectrumTestCase):
         self.assertEqual(9999788, sum(w.get_balance()))
 
 
-class TestWalletHistory_DoubleSpend(ElectrumTestCase):
+class TestWalletHistory_DoubleSpend(PywalletTestCase):
     TESTNET = True
     transactions = {
         # txn A:
@@ -4145,7 +4145,7 @@ class TestWalletHistory_DoubleSpend(ElectrumTestCase):
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
     async def test_restoring_wallet_without_manual_delete(self, mock_save_db):
@@ -4183,7 +4183,7 @@ class TestWalletHistory_DoubleSpend(ElectrumTestCase):
         self.assertEqual(999890, sum(w.get_balance()))
 
 
-class TestImportedWallet(ElectrumTestCase):
+class TestImportedWallet(PywalletTestCase):
     TESTNET = True
     transactions = {
         # txn A funds addr1:
@@ -4196,7 +4196,7 @@ class TestImportedWallet(ElectrumTestCase):
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     @mock.patch.object(wallet.Abstract_Wallet, 'save_db')
     async def test_importing_and_deleting_addresses(self, mock_save_db):

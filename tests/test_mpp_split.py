@@ -1,14 +1,14 @@
 import random
 
-import electrum.mpp_split as mpp_split  # side effect for PART_PENALTY
-from electrum.lnutil import NoPathFound
+import pywallet.mpp_split as mpp_split  # side effect for PART_PENALTY
+from pywallet.lnutil import NoPathFound
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 PART_PENALTY = mpp_split.PART_PENALTY
 
 
-class TestMppSplit(ElectrumTestCase):
+class TestMppSplit(PywalletTestCase):
     def setUp(self):
         super().setUp()
         # to make tests reproducible:

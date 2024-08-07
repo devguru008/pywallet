@@ -7,7 +7,7 @@ CONTRIB="$PROJECT_ROOT/contrib"
 CONTRIB_APPIMAGE="$CONTRIB/build-linux/appimage"
 DISTDIR="$PROJECT_ROOT/dist"
 BUILDDIR="$CONTRIB_APPIMAGE/build/appimage"
-APPDIR="$BUILDDIR/electrum.AppDir"
+APPDIR="$BUILDDIR/pywallet.AppDir"
 CACHEDIR="$CONTRIB_APPIMAGE/.cache/appimage"
 export DLL_TARGET_DIR="$CACHEDIR/dlls"
 PIP_CACHE_DIR="$CONTRIB_APPIMAGE/.cache/pip_cache"
@@ -24,7 +24,7 @@ PY_VER_MAJOR="3.11"  # as it appears in fs paths
 PKG2APPIMAGE_COMMIT="a9c85b7e61a3a883f4a35c41c5decb5af88b6b5d"
 
 VERSION=$(git describe --tags --dirty --always)
-APPIMAGE="$DISTDIR/electrum-$VERSION-x86_64.AppImage"
+APPIMAGE="$DISTDIR/pywallet-$VERSION-x86_64.AppImage"
 
 rm -rf "$BUILDDIR"
 mkdir -p "$APPDIR" "$CACHEDIR" "$PIP_CACHE_DIR" "$DISTDIR" "$DLL_TARGET_DIR"
@@ -143,15 +143,15 @@ info "installing pip."
 break_legacy_easy_install
 
 
-info "preparing electrum-locale."
+info "preparing pywallet-locale."
 (
     cd "$PROJECT_ROOT"
     git submodule update --init
 
-    LOCALE="$PROJECT_ROOT/electrum/locale/"
+    LOCALE="$PROJECT_ROOT/pywallet/locale/"
     # we want the binary to have only compiled (.mo) locale files; not source (.po) files
     rm -rf "$LOCALE"
-    "$CONTRIB/build_locale.sh" "$CONTRIB/deterministic-build/electrum-locale/locale/" "$LOCALE"
+    "$CONTRIB/build_locale.sh" "$CONTRIB/deterministic-build/pywallet-locale/locale/" "$LOCALE"
 )
 
 
@@ -169,7 +169,7 @@ info "Installing build dependencies."
 "$python" -m pip install --no-build-isolation --no-dependencies --no-binary :all: --no-warn-script-location \
     --cache-dir "$PIP_CACHE_DIR" -r "$CONTRIB/deterministic-build/requirements-build-appimage.txt"
 
-info "installing electrum and its dependencies."
+info "installing pywallet and its dependencies."
 "$python" -m pip install --no-build-isolation --no-dependencies --no-binary :all: --no-warn-script-location \
     --cache-dir "$PIP_CACHE_DIR" -r "$CONTRIB/deterministic-build/requirements.txt"
 "$python" -m pip install --no-build-isolation --no-dependencies --no-binary :all: --only-binary PyQt5,PyQt5-Qt5,cryptography --no-warn-script-location \
@@ -186,7 +186,7 @@ info "installing electrum and its dependencies."
 
 info "desktop integration."
 cp "$PROJECT_ROOT/pywallet.desktop" "$APPDIR/pywallet.desktop"
-cp "$PROJECT_ROOT/electrum/gui/icons/electrum.png" "$APPDIR/electrum.png"
+cp "$PROJECT_ROOT/pywallet/gui/icons/pywallet.png" "$APPDIR/pywallet.png"
 
 
 # add launcher

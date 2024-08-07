@@ -1,13 +1,13 @@
 #!/usr/bin/python3
-# For usage in shell, to get the version of electrum, without needing electrum installed.
+# For usage in shell, to get the version of pywallet, without needing pywallet installed.
 # usage: ./print_pywallet_version.py [<attr_name>]
 #
 # For example:
 # $ VERSION=$("$CONTRIB"/print_pywallet_version.py)
 # $ VERSION=$("$CONTRIB"/print_pywallet_version.py APK_VERSION)
 # instead of
-# $ VERSION=$(python3 -c "import electrum; print(electrum.version.PYWALLET_VERSION)")
-# $ VERSION=$(python3 -c "import electrum; print(electrum.version.APK_VERSION)")
+# $ VERSION=$(python3 -c "import pywallet; print(pywallet.version.PYWALLET_VERSION)")
+# $ VERSION=$(python3 -c "import pywallet; print(pywallet.version.APK_VERSION)")
 
 import importlib.util
 import os
@@ -21,7 +21,7 @@ if __name__ == '__main__':
         attr_name = "PYWALLET_VERSION"
 
     project_root = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-    version_file_path = os.path.join(project_root, "electrum", "version.py")
+    version_file_path = os.path.join(project_root, "pywallet", "version.py")
 
     # load version.py; needlessly complicated alternative to "imp.load_source":
     version_spec = importlib.util.spec_from_file_location('version', version_file_path)

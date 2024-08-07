@@ -1,25 +1,25 @@
 import os
 import time
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
-from electrum.simple_config import SimpleConfig
-from electrum.wallet import restore_wallet_from_text, Standard_Wallet, Abstract_Wallet
-from electrum.invoices import PR_UNPAID, PR_PAID, PR_UNCONFIRMED, BaseInvoice, Invoice, LN_EXPIRY_NEVER
-from electrum.address_synchronizer import TX_HEIGHT_UNCONFIRMED
-from electrum.transaction import Transaction, PartialTxOutput
-from electrum.util import TxMinedInfo, InvoiceError
+from pywallet.simple_config import SimpleConfig
+from pywallet.wallet import restore_wallet_from_text, Standard_Wallet, Abstract_Wallet
+from pywallet.invoices import PR_UNPAID, PR_PAID, PR_UNCONFIRMED, BaseInvoice, Invoice, LN_EXPIRY_NEVER
+from pywallet.address_synchronizer import TX_HEIGHT_UNCONFIRMED
+from pywallet.transaction import Transaction, PartialTxOutput
+from pywallet.util import TxMinedInfo, InvoiceError
 
 
-class TestWalletPaymentRequests(ElectrumTestCase):
+class TestWalletPaymentRequests(PywalletTestCase):
     """test 'incoming' invoices"""
     TESTNET = True
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
-        self.wallet1_path = os.path.join(self.electrum_path, "somewallet1")
-        self.wallet2_path = os.path.join(self.electrum_path, "somewallet2")
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
+        self.wallet1_path = os.path.join(self.pywallet_path, "somewallet1")
+        self.wallet2_path = os.path.join(self.pywallet_path, "somewallet2")
         self._orig_get_cur_time = BaseInvoice._get_cur_time
 
     def tearDown(self):
@@ -268,7 +268,7 @@ class TestWalletPaymentRequests(ElectrumTestCase):
         self.assertEqual(pr2, wallet1.get_request_by_addr(addr1))
 
 
-class TestBaseInvoice(ElectrumTestCase):
+class TestBaseInvoice(PywalletTestCase):
     TESTNET = True
 
     async def test_arg_validation(self):

@@ -6,7 +6,8 @@ build/
 dist/
 *.egg/
 Electrum.egg-info/
-electrum/locale/
+Pywallet.egg-info/
+pywallet/locale/
 .devlocaltmp/
 *_trial_temp
 packages
@@ -19,6 +20,7 @@ bin/
 .mypy_cache
 .vscode
 electrum_data
+pywallet_data
 .DS_Store
 contrib/trigger_website
 contrib/trigger_binaries
@@ -46,8 +48,8 @@ contrib/libusb/
 contrib/.venv_make_packages/
 
 # shared objects
-electrum/*.so
-electrum/*.so.*
-electrum/*.dll
-electrum/*.dylib
+pywallet/*.so
+pywallet/*.so.*
+pywallet/*.dll
+pywallet/*.dylib
 contrib/osx/*.dylib

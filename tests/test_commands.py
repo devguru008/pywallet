@@ -2,23 +2,23 @@ import unittest
 from unittest import mock
 from decimal import Decimal
 
-from electrum.commands import Commands, eval_bool
-from electrum import storage, wallet
-from electrum.wallet import restore_wallet_from_text, Abstract_Wallet
-from electrum.address_synchronizer import TX_HEIGHT_UNCONFIRMED
-from electrum.simple_config import SimpleConfig
-from electrum.transaction import Transaction, TxOutput, tx_from_any
-from electrum.util import UserFacingException, NotEnoughFunds
+from pywallet.commands import Commands, eval_bool
+from pywallet import storage, wallet
+from pywallet.wallet import restore_wallet_from_text, Abstract_Wallet
+from pywallet.address_synchronizer import TX_HEIGHT_UNCONFIRMED
+from pywallet.simple_config import SimpleConfig
+from pywallet.transaction import Transaction, TxOutput, tx_from_any
+from pywallet.util import UserFacingException, NotEnoughFunds
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 from .test_wallet_vertical import WalletIntegrityHelper
 
 
-class TestCommands(ElectrumTestCase):
+class TestCommands(PywalletTestCase):
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     def test_setconfig_non_auth_number(self):
         self.assertEqual(7777, Commands._setconfig_normalize_value('rpcport', "7777"))
@@ -33,18 +33,18 @@ class TestCommands(ElectrumTestCase):
         self.assertEqual(True, Commands._setconfig_normalize_value('show_console_tab', "True"))
 
     def test_setconfig_non_auth_list(self):
-        self.assertEqual(['file:///var/www/', 'https://electrum.org'],
-            Commands._setconfig_normalize_value('url_rewrite', "['file:///var/www/','https://electrum.org']"))
-        self.assertEqual(['file:///var/www/', 'https://electrum.org'],
-            Commands._setconfig_normalize_value('url_rewrite', '["file:///var/www/","https://electrum.org"]'))
+        self.assertEqual(['file:///var/www/', 'https://wallet.caprifin.co'],
+            Commands._setconfig_normalize_value('url_rewrite', "['file:///var/www/','https://wallet.caprifin.co']"))
+        self.assertEqual(['file:///var/www/', 'https://wallet.caprifin.co'],
+            Commands._setconfig_normalize_value('url_rewrite', '["file:///var/www/","https://wallet.caprifin.co"]'))
 
     def test_setconfig_auth(self):
         self.assertEqual("7777", Commands._setconfig_normalize_value('rpcuser', "7777"))
         self.assertEqual("7777", Commands._setconfig_normalize_value('rpcuser', '7777'))
         self.assertEqual("7777", Commands._setconfig_normalize_value('rpcpassword', '7777'))
         self.assertEqual("2asd", Commands._setconfig_normalize_value('rpcpassword', '2asd'))
-        self.assertEqual("['file:///var/www/','https://electrum.org']",
-            Commands._setconfig_normalize_value('rpcpassword', "['file:///var/www/','https://electrum.org']"))
+        self.assertEqual("['file:///var/www/','https://wallet.caprifin.co']",
+            Commands._setconfig_normalize_value('rpcpassword', "['file:///var/www/','https://wallet.caprifin.co']"))
 
     def test_eval_bool(self):
         self.assertFalse(eval_bool("False"))
@@ -125,12 +125,12 @@ class TestCommands(ElectrumTestCase):
                          await cmds.getprivatekeys(['bc1q3g5tmkmlvxryhh843v4dz026avatc0zzr6h3af', 'bc1q9pzjpjq4nqx5ycnywekcmycqz0wjp2nq604y2n'], wallet=wallet))
 
 
-class TestCommandsTestnet(ElectrumTestCase):
+class TestCommandsTestnet(PywalletTestCase):
     TESTNET = True
 
     def setUp(self):
         super().setUp()
-        self.config = SimpleConfig({'electrum_path': self.electrum_path})
+        self.config = SimpleConfig({'pywallet_path': self.pywallet_path})
 
     async def test_convert_xkey(self):
         cmds = Commands(config=self.config)

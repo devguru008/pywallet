@@ -1,16 +1,16 @@
 import asyncio
 
-from electrum import util
-from electrum.ecc import ECPrivkey
-from electrum.lnutil import LNPeerAddr
-from electrum.lntransport import LNResponderTransport, LNTransport
-from electrum.util import OldTaskGroup
+from pywallet import util
+from pywallet.ecc import ECPrivkey
+from pywallet.lnutil import LNPeerAddr
+from pywallet.lntransport import LNResponderTransport, LNTransport
+from pywallet.util import OldTaskGroup
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 from .test_bitcoin import needs_test_with_all_chacha20_implementations
 
 
-class TestLNTransport(ElectrumTestCase):
+class TestLNTransport(PywalletTestCase):
 
     @needs_test_with_all_chacha20_implementations
     async def test_responder(self):

@@ -1,4 +1,4 @@
-# Electrum AppArmor Profiles
+# Pywallet AppArmor Profiles
 AppArmor is a Mandatory Access Control (MAC) system which confines programs to a limited set of resources.
 AppArmor confinement is provided via profiles loaded into the kernel.
 
@@ -16,9 +16,9 @@ Verify that the profile is loaded:
 ```
 sudo apparmor_status
 ```
-Look for the entry corresponding to `electrum`
+Look for the entry corresponding to `pywallet`
 
-## Usage 
+## Usage
 After installing the AppArmor profile, electrum will be restricted to the permissions specified in the profile.
 
 ## Compatibility

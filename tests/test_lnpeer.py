@@ -14,37 +14,37 @@ from typing import Iterable, NamedTuple, Tuple, List, Dict
 
 from aiorpcx import timeout_after, TaskTimeout
 
-import electrum
-import electrum.trampoline
-from electrum import bitcoin
-from electrum import util
-from electrum import constants
-from electrum.network import Network
-from electrum.ecc import ECPrivkey
-from electrum import simple_config, lnutil
-from electrum.lnaddr import lnencode, LnAddr, lndecode
-from electrum.bitcoin import COIN, sha256
-from electrum.util import NetworkRetryManager, bfh, OldTaskGroup, EventListener, InvoiceError
-from electrum.lnpeer import Peer
-from electrum.lnutil import LNPeerAddr, Keypair, privkey_to_pubkey
-from electrum.lnutil import PaymentFailure, LnFeatures, HTLCOwner, PaymentFeeBudget
-from electrum.lnchannel import ChannelState, PeerState, Channel
-from electrum.lnrouter import LNPathFinder, PathEdge, LNPathInconsistent
-from electrum.channel_db import ChannelDB
-from electrum.lnworker import LNWallet, NoPathFound, SentHtlcInfo, PaySession
-from electrum.lnmsg import encode_msg, decode_msg
-from electrum import lnmsg
-from electrum.logging import console_stderr_handler, Logger
-from electrum.lnworker import PaymentInfo, RECEIVED
-from electrum.lnonion import OnionFailureCode, OnionRoutingFailure
-from electrum.lnutil import UpdateAddHtlc
-from electrum.lnutil import LOCAL, REMOTE
-from electrum.invoices import PR_PAID, PR_UNPAID
-from electrum.interface import GracefulDisconnect
-from electrum.simple_config import SimpleConfig
+import pywallet
+import pywallet.trampoline
+from pywallet import bitcoin
+from pywallet import util
+from pywallet import constants
+from pywallet.network import Network
+from pywallet.ecc import ECPrivkey
+from pywallet import simple_config, lnutil
+from pywallet.lnaddr import lnencode, LnAddr, lndecode
+from pywallet.bitcoin import COIN, sha256
+from pywallet.util import NetworkRetryManager, bfh, OldTaskGroup, EventListener, InvoiceError
+from pywallet.lnpeer import Peer
+from pywallet.lnutil import LNPeerAddr, Keypair, privkey_to_pubkey
+from pywallet.lnutil import PaymentFailure, LnFeatures, HTLCOwner, PaymentFeeBudget
+from pywallet.lnchannel import ChannelState, PeerState, Channel
+from pywallet.lnrouter import LNPathFinder, PathEdge, LNPathInconsistent
+from pywallet.channel_db import ChannelDB
+from pywallet.lnworker import LNWallet, NoPathFound, SentHtlcInfo, PaySession
+from pywallet.lnmsg import encode_msg, decode_msg
+from pywallet import lnmsg
+from pywallet.logging import console_stderr_handler, Logger
+from pywallet.lnworker import PaymentInfo, RECEIVED
+from pywallet.lnonion import OnionFailureCode, OnionRoutingFailure
+from pywallet.lnutil import UpdateAddHtlc
+from pywallet.lnutil import LOCAL, REMOTE
+from pywallet.invoices import PR_PAID, PR_UNPAID
+from pywallet.interface import GracefulDisconnect
+from pywallet.simple_config import SimpleConfig
 
 from .test_lnchannel import create_test_channels
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 def keypair():
     priv = ECPrivkey.generate_random_key().get_secret_bytes()
@@ -148,7 +148,7 @@ class MockLNWallet(Logger, EventListener, NetworkRetryManager[LNPeerAddr]):
         NetworkRetryManager.__init__(self, max_retry_delay_normal=1, init_retry_delay_normal=1)
         self.node_keypair = local_keypair
         self.payment_secret_key = os.urandom(256) # does not need to be deterministic in tests
-        self._user_dir = tempfile.mkdtemp(prefix="electrum-lnpeer-test-")
+        self._user_dir = tempfile.mkdtemp(prefix="pywallet-lnpeer-test-")
         self.config = SimpleConfig({}, read_user_dir_function=lambda: self._user_dir)
         self.network = MockNetwork(tx_queue, config=self.config)
         self.taskgroup = OldTaskGroup()
@@ -164,7 +164,7 @@ class MockLNWallet(Logger, EventListener, NetworkRetryManager[LNPeerAddr]):
         self.features |= LnFeatures.OPTION_UPFRONT_SHUTDOWN_SCRIPT_OPT
         self.features |= LnFeatures.VAR_ONION_OPT
         self.features |= LnFeatures.PAYMENT_SECRET_OPT
-        self.features |= LnFeatures.OPTION_TRAMPOLINE_ROUTING_OPT_ELECTRUM
+        self.features |= LnFeatures.OPTION_TRAMPOLINE_ROUTING_OPT_PYWALLET
         self.features |= LnFeatures.OPTION_CHANNEL_TYPE_OPT
         self.features |= LnFeatures.OPTION_SCID_ALIAS_OPT
         self.pending_payments = defaultdict(asyncio.Future)
@@ -435,7 +435,7 @@ class PaymentTimeout(Exception): pass
 class SuccessfulTest(Exception): pass
 
 
-class TestPeer(ElectrumTestCase):
+class TestPeer(PywalletTestCase):
     TESTNET = True
 
     @classmethod
@@ -456,7 +456,7 @@ class TestPeer(ElectrumTestCase):
         for lnworker in self._lnworkers_created:
             shutil.rmtree(lnworker._user_dir)
         self._lnworkers_created.clear()
-        electrum.trampoline._TRAMPOLINE_NODES_UNITTESTS = {}
+        pywallet.trampoline._TRAMPOLINE_NODES_UNITTESTS = {}
         await super().asyncTearDown()
 
     @staticmethod
@@ -675,7 +675,7 @@ class TestPeerDirect(TestPeer):
             async with OldTaskGroup() as group:
                 await group.spawn(p1._message_loop())
                 await group.spawn(p2._message_loop())
-                with self.assertLogs('electrum', level='INFO') as logs:
+                with self.assertLogs('pywallet', level='INFO') as logs:
                     async with OldTaskGroup() as group2:
                         await group2.spawn(p1.reestablish_channel(chan_AB))
                         await group2.spawn(p2.reestablish_channel(chan_BA))
@@ -732,7 +732,7 @@ class TestPeerDirect(TestPeer):
             async with OldTaskGroup() as group:
                 await group.spawn(p1._message_loop())
                 await group.spawn(p2._message_loop())
-                with self.assertLogs('electrum', level='INFO') as logs:
+                with self.assertLogs('pywallet', level='INFO') as logs:
                     async with OldTaskGroup() as group2:
                         await group2.spawn(p1.reestablish_channel(chan_AB))
                         await group2.spawn(p2.reestablish_channel(chan_BA))
@@ -776,7 +776,7 @@ class TestPeerDirect(TestPeer):
         if test_trampoline:
             await self._activate_trampoline(w1)
             # declare bob as trampoline node
-            electrum.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
+            pywallet.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
                 'bob': LNPeerAddr(host="127.0.0.1", port=9735, pubkey=w2.node_keypair.pubkey),
             }
 
@@ -1627,7 +1627,7 @@ class TestPeerForwarding(TestPeer):
                 self.assertEqual(None, graph.workers['alice'].get_preimage(lnaddr1.paymenthash))
             with self.subTest(msg="try to make Bob forward in trampoline mode"):
                 # declare Bob as trampoline forwarding node
-                electrum.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
+                pywallet.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
                     graph.workers['bob'].name: LNPeerAddr(host="127.0.0.1", port=9735, pubkey=graph.workers['bob'].node_keypair.pubkey),
                 }
                 await self._activate_trampoline(graph.workers['alice'])
@@ -1731,7 +1731,7 @@ class TestPeerForwarding(TestPeer):
             if mpp_invoice:
                 dave_w.features |= LnFeatures.BASIC_MPP_OPT
             if disable_trampoline_receiving:
-                dave_w.features &= ~LnFeatures.OPTION_TRAMPOLINE_ROUTING_OPT_ELECTRUM
+                dave_w.features &= ~LnFeatures.OPTION_TRAMPOLINE_ROUTING_OPT_PYWALLET
             if not bob_forwarding:
                 bob_w.enable_htlc_forwarding = False
             if alice_uses_trampoline:
@@ -1784,7 +1784,7 @@ class TestPeerForwarding(TestPeer):
 
     async def test_payment_multipart_trampoline_e2e(self):
         graph = self.prepare_chans_and_peers_in_graph(self.GRAPH_DEFINITIONS['square_graph'])
-        electrum.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
+        pywallet.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
             graph.workers['bob'].name: LNPeerAddr(host="127.0.0.1", port=9735, pubkey=graph.workers['bob'].node_keypair.pubkey),
             graph.workers['carol'].name: LNPeerAddr(host="127.0.0.1", port=9735, pubkey=graph.workers['carol'].node_keypair.pubkey),
         }
@@ -1799,7 +1799,7 @@ class TestPeerForwarding(TestPeer):
 
     async def test_payment_multipart_trampoline_legacy(self):
         graph = self.prepare_chans_and_peers_in_graph(self.GRAPH_DEFINITIONS['square_graph'])
-        electrum.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
+        pywallet.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
             graph.workers['bob'].name: LNPeerAddr(host="127.0.0.1", port=9735, pubkey=graph.workers['bob'].node_keypair.pubkey),
             graph.workers['carol'].name: LNPeerAddr(host="127.0.0.1", port=9735, pubkey=graph.workers['carol'].node_keypair.pubkey),
         }
@@ -1887,7 +1887,7 @@ class TestPeerForwarding(TestPeer):
         peers = graph.peers.values()
 
         # declare routing nodes as trampoline nodes
-        electrum.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
+        pywallet.trampoline._TRAMPOLINE_NODES_UNITTESTS = {
             graph.workers['bob'].name: LNPeerAddr(host="127.0.0.1", port=9735, pubkey=graph.workers['bob'].node_keypair.pubkey),
             graph.workers['carol'].name: LNPeerAddr(host="127.0.0.1", port=9735, pubkey=graph.workers['carol'].node_keypair.pubkey),
         }
@@ -1912,7 +1912,7 @@ class TestPeerForwarding(TestPeer):
             graph.workers['alice'].network.config.TEST_FORCE_MPP = True
         if is_legacy:
             # turn off trampoline features in invoice
-            graph.workers['dave'].features = graph.workers['dave'].features ^ LnFeatures.OPTION_TRAMPOLINE_ROUTING_OPT_ELECTRUM
+            graph.workers['dave'].features = graph.workers['dave'].features ^ LnFeatures.OPTION_TRAMPOLINE_ROUTING_OPT_PYWALLET
         return graph
 
     async def test_trampoline_mpp_consolidation(self):

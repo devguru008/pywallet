@@ -29,13 +29,13 @@ fi
 info "building docker image."
 docker build \
     $DOCKER_BUILD_FLAGS \
-    -t electrum-sdist-builder-img \
+    -t pywallet-sdist-builder-img \
     "$CONTRIB_SDIST"
 
 # maybe do fresh clone
 if [ ! -z "$ELECBUILD_COMMIT" ] ; then
     info "ELECBUILD_COMMIT=$ELECBUILD_COMMIT. doing fresh clone and git checkout."
-    FRESH_CLONE="/tmp/electrum_build/sdist/fresh_clone/electrum"
+    FRESH_CLONE="/tmp/pywallet_build/sdist/fresh_clone/pywallet"
     rm -rf "$FRESH_CLONE" 2>/dev/null || ( info "we need sudo to rm prev FRESH_CLONE." && sudo rm -rf "$FRESH_CLONE" )
     umask 0022
     git clone "$PROJECT_ROOT" "$FRESH_CLONE"
@@ -55,12 +55,12 @@ if [ ! -z "$ELECBUILD_COMMIT" ] ; then  # fresh clone (reproducible build)
     fi
 fi
 docker run -it \
-    --name electrum-sdist-builder-cont \
-    -v "$PROJECT_ROOT_OR_FRESHCLONE_ROOT":/opt/electrum \
+    --name pywallet-sdist-builder-cont \
+    -v "$PROJECT_ROOT_OR_FRESHCLONE_ROOT":/opt/pywallet \
     --rm \
-    --workdir /opt/electrum/contrib/build-linux/sdist \
+    --workdir /opt/pywallet/contrib/build-linux/sdist \
     --env OMIT_UNCLEAN_FILES \
-    electrum-sdist-builder-img \
+    pywallet-sdist-builder-img \
     ./make_sdist.sh
 
 # make sure resulting binary location is independent of fresh_clone

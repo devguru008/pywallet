@@ -3,13 +3,13 @@ abi <abi/3.0>,
 
 include <tunables/global>
 
-@{electrum_exec_path} = /{usr/,usr/local/,*/*/.local/,}bin/electrum
+@{pywallet_exec_path} = /{usr/,usr/local/,*/*/.local/,}bin/pywallet
 
-profile electrum @{electrum_exec_path} {
-  include <abstractions/electrum>
+profile pywallet @{pywallet_exec_path} {
+  include <abstractions/pywallet>
 
-  @{electrum_exec_path} mr,
-  owner @{HOME}/.electrum/{**,} rw,
+  @{pywallet_exec_path} mr,
+  owner @{HOME}/.pywallet/{**,} rw,
   owner @{HOME}/.local/{**,} mrw,
 
 }

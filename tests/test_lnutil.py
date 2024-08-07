@@ -1,10 +1,10 @@
 import unittest
 import json
 
-from electrum import bitcoin
-from electrum import ecc
-from electrum.json_db import StoredDict
-from electrum.lnutil import (RevocationStore, get_per_commitment_secret_from_seed, make_offered_htlc,
+from pywallet import bitcoin
+from pywallet import ecc
+from pywallet.json_db import StoredDict
+from pywallet.lnutil import (RevocationStore, get_per_commitment_secret_from_seed, make_offered_htlc,
                              make_received_htlc, make_commitment, make_htlc_tx_witness, make_htlc_tx_output,
                              make_htlc_tx_inputs, secret_to_pubkey, derive_blinded_pubkey, derive_privkey,
                              derive_pubkey, make_htlc_tx, extract_ctn_from_tx, UnableToDeriveSecret,
@@ -12,13 +12,13 @@ from electrum.lnutil import (RevocationStore, get_per_commitment_secret_from_see
                              ScriptHtlc, extract_nodeid, calc_fees_for_commitment_tx, UpdateAddHtlc, LnFeatures,
                              ln_compare_features, IncompatibleLightningFeatures, ChannelType,
                              ImportedChannelBackupStorage)
-from electrum.util import bfh, MyEncoder
-from electrum.transaction import Transaction, PartialTransaction, Sighash
-from electrum.lnworker import LNWallet
-from electrum.wallet import restore_wallet_from_text, Standard_Wallet
-from electrum.simple_config import SimpleConfig
+from pywallet.util import bfh, MyEncoder
+from pywallet.transaction import Transaction, PartialTransaction, Sighash
+from pywallet.lnworker import LNWallet
+from pywallet.wallet import restore_wallet_from_text, Standard_Wallet
+from pywallet.simple_config import SimpleConfig
 
-from . import ElectrumTestCase, as_testnet
+from . import PywalletTestCase, as_testnet
 
 
 funding_tx_id = '8984484a580b825b9972d7adb15050b3ab624ccd731946b3eeddb92f4e7ef6be'
@@ -42,7 +42,7 @@ local_revocation_pubkey = bytes.fromhex('0212a140cd0c6539d07cd08dfe09984dec3251e
 # funding wscript = 5221023da092f6980e58d2c037173180e9a465476026ee50f96695963e8efe436f54eb21030e9f7b623d2ccc7c9bd44d66d5ce21ce504c0acf6385a132cec6d3c39fa711c152ae
 
 
-class TestLNUtil(ElectrumTestCase):
+class TestLNUtil(PywalletTestCase):
     def test_shachain_store(self):
         tests = [
             {
@@ -753,13 +753,13 @@ class TestLNUtil(ElectrumTestCase):
         # accepted by getaddrinfo but not ipaddress.ip_address
         self.assertEqual(split_host_port("127.0.0:8000"), ("127.0.0", "8000"))
         self.assertEqual(split_host_port("127.0.0"), ("127.0.0", "9735"))
-        self.assertEqual(split_host_port("electrum.org:8000"), ("electrum.org", "8000"))
-        self.assertEqual(split_host_port("electrum.org"), ("electrum.org", "9735"))
+        self.assertEqual(split_host_port("pywallet.org:8000"), ("pywallet.org", "8000"))
+        self.assertEqual(split_host_port("pywallet.org"), ("pywallet.org", "9735"))
 
         with self.assertRaises(ConnStringFormatError):
-            split_host_port("electrum.org:8000:")
+            split_host_port("pywallet.org:8000:")
         with self.assertRaises(ConnStringFormatError):
-            split_host_port("electrum.org:")
+            split_host_port("pywallet.org:")
 
     def test_extract_nodeid(self):
         pubkey1 = ecc.GENERATOR.get_public_key_bytes(compressed=True)
@@ -891,7 +891,7 @@ class TestLNUtil(ElectrumTestCase):
         self.assertTrue(f1.supports(LnFeatures.PAYMENT_SECRET_OPT))
         self.assertTrue(f1.supports(LnFeatures.BASIC_MPP_REQ))
         self.assertFalse(f1.supports(LnFeatures.OPTION_STATIC_REMOTEKEY_OPT))
-        self.assertFalse(f1.supports(LnFeatures.OPTION_TRAMPOLINE_ROUTING_REQ_ELECTRUM))
+        self.assertFalse(f1.supports(LnFeatures.OPTION_TRAMPOLINE_ROUTING_REQ_PYWALLET))
 
     def test_lnworker_decode_channel_update_msg(self):
         msg_without_prefix = bytes.fromhex("439b71c8ddeff63004e4ff1f9764a57dcf20232b79d9d669aef0e31c42be8e44208f7d868d0133acb334047f30e9399dece226ccd98e5df5330adf7f356290516fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d619000000000008762700054a00005ef2cf9c0101009000000000000003e80000000000000001000000002367b880")
@@ -918,7 +918,7 @@ class TestLNUtil(ElectrumTestCase):
         features = LnFeatures(LnFeatures.BASIC_MPP_OPT | LnFeatures.OPTION_STATIC_REMOTEKEY_OPT)
         self.assertTrue(ChannelType.OPTION_STATIC_REMOTEKEY.complies_with_features(features))
 
-        features = LnFeatures(LnFeatures.BASIC_MPP_OPT | LnFeatures.OPTION_TRAMPOLINE_ROUTING_OPT_ELECTRUM)
+        features = LnFeatures(LnFeatures.BASIC_MPP_OPT | LnFeatures.OPTION_TRAMPOLINE_ROUTING_OPT_PYWALLET)
         self.assertFalse(ChannelType.OPTION_STATIC_REMOTEKEY.complies_with_features(features))
 
         # ignore unknown channel types
@@ -928,7 +928,7 @@ class TestLNUtil(ElectrumTestCase):
     @as_testnet
     async def test_decode_imported_channel_backup_v0(self):
         encrypted_cb = "channel_backup:Adn87xcGIs9H2kfp4VpsOaNKWCHX08wBoqq37l1cLYKGlJamTeoaLEwpJA81l1BXF3GP/mRxqkY+whZG9l51G8izIY/kmMSvnh0DOiZEdwaaT/1/MwEHfsEomruFqs+iW24SFJPHbMM7f80bDtIxcLfZkKmgcKBAOlcqtq+dL3U3yH74S8BDDe2L4snaxxpCjF0JjDMBx1UR/28D+QlIi+lbvv1JMaCGXf+AF1+3jLQf8+lVI+rvFdyArws6Ocsvjf+ANQeSGUwW6Nb2xICQcMRgr1DO7bO4pgGu408eYRr2v3ayJBVtnKwSwd49gF5SDSjTDAO4CCM0uj9H5RxyzH7fqotkd9J80MBr84RiBXAeXKz+Ap8608/FVqgQ9BOcn6LhuAQdE5zXpmbQyw5jUGkPvHuseR+rzthzncy01odUceqTNg=="
-        config = SimpleConfig({'electrum_path': self.electrum_path})
+        config = SimpleConfig({'pywallet_path': self.pywallet_path})
         d = restore_wallet_from_text("9dk", path=None, gap_limit=2, config=config)
         wallet1 = d['wallet']  # type: Standard_Wallet
         decoded_cb = ImportedChannelBackupStorage.from_encrypted_str(encrypted_cb, password=wallet1.get_fingerprint())
@@ -955,7 +955,7 @@ class TestLNUtil(ElectrumTestCase):
     @as_testnet
     async def test_decode_imported_channel_backup_v1(self):
         encrypted_cb = "channel_backup:AVYIedu0qSLfY2M2bBxF6dA4RAxcmobp+3h9mxALWWsv5X7hhNg0XYOKNd11FE6BJOZgZnIZ4CCAlHtLNj0/9S5GbNhbNZiQXxeHMwC1lHvtjawkwSejIJyOI52DkDFHBAGZRd4fJjaPJRHnUizWfySVR4zjd08lTinpoIeL7C7tXBW1N6YqceqV7RpeoywlBXJtFfCCuw0hnUKgq3SMlBKapkNAIgGrg15aIHNcYeENxCxr5FD1s7DIwFSECqsBVnu/Ogx2oii8BfuxqJq8vuGq4Ib/BVaSVtdb2E1wklAor/CG0p9Fg9mFWND98JD+64nz9n/knPFFyHxTXErn+ct3ZcStsLYynWKUIocgu38PtzCJ7r5ivqOw4O49fbbzdjcgMUGklPYxjuinETneCo+dCPa1uepOGTqeOYmnjVYtYZYXOlWV1F5OtNoM7MwwJjAbz84="
-        config = SimpleConfig({'electrum_path': self.electrum_path})
+        config = SimpleConfig({'pywallet_path': self.pywallet_path})
         d = restore_wallet_from_text("9dk", path=None, gap_limit=2, config=config)
         wallet1 = d['wallet']  # type: Standard_Wallet
         decoded_cb = ImportedChannelBackupStorage.from_encrypted_str(encrypted_cb, password=wallet1.get_fingerprint())

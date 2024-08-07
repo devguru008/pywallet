@@ -1,4 +1,4 @@
-# Copyright (C) 2018 The Electrum developers
+# Copyright (C) 2018 The Pywallet developers
 # Copyright (C) 2015-2018 The Lightning Network Developers
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,18 +28,18 @@ import binascii
 from pprint import pformat
 import logging
 
-from electrum import bitcoin
-from electrum import lnpeer
-from electrum import lnchannel
-from electrum import lnutil
-from electrum import bip32 as bip32_utils
-from electrum.lnutil import SENT, LOCAL, REMOTE, RECEIVED, UpdateAddHtlc
-from electrum.logging import console_stderr_handler
-from electrum.lnchannel import ChannelState
-from electrum.json_db import StoredDict
-from electrum.coinchooser import PRNG
+from pywallet import bitcoin
+from pywallet import lnpeer
+from pywallet import lnchannel
+from pywallet import lnutil
+from pywallet import bip32 as bip32_utils
+from pywallet.lnutil import SENT, LOCAL, REMOTE, RECEIVED, UpdateAddHtlc
+from pywallet.logging import console_stderr_handler
+from pywallet.lnchannel import ChannelState
+from pywallet.json_db import StoredDict
+from pywallet.coinchooser import PRNG
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 
 one_bitcoin_in_msat = bitcoin.COIN * 1000
@@ -201,7 +201,7 @@ def create_test_channels(*, feerate=6000, local_msat=None, remote_msat=None,
 
     return alice, bob
 
-class TestFee(ElectrumTestCase):
+class TestFee(PywalletTestCase):
     """
     test
     https://github.com/lightningnetwork/lightning-rfc/blob/e0c436bd7a3ed6a028e1cb472908224658a14eca/03-transactions.md#requirements-2
@@ -212,7 +212,7 @@ class TestFee(ElectrumTestCase):
                                                           remote_msat=5000000000)
         self.assertIn(9999817, [x.value for x in alice_channel.get_latest_commitment(LOCAL).outputs()])
 
-class TestChannel(ElectrumTestCase):
+class TestChannel(PywalletTestCase):
     maxDiff = 999
 
     def assertOutputExistsByValue(self, tx, amt_sat):
@@ -313,7 +313,7 @@ class TestChannel(ElectrumTestCase):
         self.assertEqual(bob_channel.included_htlcs(REMOTE, RECEIVED, 0), [])
         self.assertEqual(bob_channel.included_htlcs(REMOTE, RECEIVED, 1), [])
 
-        from electrum.lnutil import extract_ctn_from_tx_and_chan
+        from pywallet.lnutil import extract_ctn_from_tx_and_chan
         tx0 = str(alice_channel.force_close_tx())
         self.assertEqual(alice_channel.get_oldest_unrevoked_ctn(LOCAL), 0)
         self.assertEqual(extract_ctn_from_tx_and_chan(alice_channel.force_close_tx(), alice_channel), 0)
@@ -639,7 +639,7 @@ class TestChannel(ElectrumTestCase):
         self.assertIn('Not enough local balance', cm.exception.args[0])
 
 
-class TestAvailableToSpend(ElectrumTestCase):
+class TestAvailableToSpend(PywalletTestCase):
     def test_DesyncHTLCs(self):
         alice_channel, bob_channel = create_test_channels()
         self.assertEqual(499986152000, alice_channel.available_to_spend(LOCAL))
@@ -687,7 +687,7 @@ class TestAvailableToSpend(ElectrumTestCase):
         alice_channel.add_htlc(htlc)
 
 
-class TestChanReserve(ElectrumTestCase):
+class TestChanReserve(PywalletTestCase):
     def setUp(self):
         alice_channel, bob_channel = create_test_channels()
         alice_min_reserve = int(.5 * one_bitcoin_in_msat // 1000)
@@ -816,7 +816,7 @@ class TestChanReserve(ElectrumTestCase):
         self.assertEqual(self.alice_channel.available_to_spend(REMOTE), amt2)
         self.assertEqual(self.bob_channel.available_to_spend(LOCAL), amt2)
 
-class TestDust(ElectrumTestCase):
+class TestDust(PywalletTestCase):
     def test_DustLimit(self):
         alice_channel, bob_channel = create_test_channels()
 

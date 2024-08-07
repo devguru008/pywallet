@@ -1,9 +1,9 @@
-from electrum.interface import ServerAddr
+from pywallet.interface import ServerAddr
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 
-class TestServerAddr(ElectrumTestCase):
+class TestServerAddr(PywalletTestCase):
 
     def test_from_str(self):
         self.assertEqual(ServerAddr(host="104.198.149.61", port=80, protocol="t"),

@@ -1,34 +1,34 @@
 import os
 
-from electrum import SimpleConfig
-from electrum.invoices import Invoice
-from electrum.payment_identifier import (maybe_extract_lightning_payment_identifier, PaymentIdentifier,
+from pywallet import SimpleConfig
+from pywallet.invoices import Invoice
+from pywallet.payment_identifier import (maybe_extract_lightning_payment_identifier, PaymentIdentifier,
                                          PaymentIdentifierType, invoice_from_payment_identifier)
-from electrum.wallet import restore_wallet_from_text
+from pywallet.wallet import restore_wallet_from_text
 
-from . import ElectrumTestCase
-from electrum.transaction import PartialTxOutput
+from . import PywalletTestCase
+from pywallet.transaction import PartialTxOutput
 
 
 class WalletMock:
-    def __init__(self, electrum_path):
+    def __init__(self, pywallet_path):
         self.config = SimpleConfig({
-            'electrum_path': electrum_path,
+            'pywallet_path': pywallet_path,
             'decimal_point': 5
         })
         self.contacts = None
 
 
-class TestPaymentIdentifier(ElectrumTestCase):
+class TestPaymentIdentifier(PywalletTestCase):
     def setUp(self):
         super().setUp()
-        self.wallet = WalletMock(self.electrum_path)
+        self.wallet = WalletMock(self.pywallet_path)
 
         self.config = SimpleConfig({
-            'electrum_path': self.electrum_path,
+            'pywallet_path': self.pywallet_path,
             'decimal_point': 5
         })
-        self.wallet2_path = os.path.join(self.electrum_path, "somewallet2")
+        self.wallet2_path = os.path.join(self.pywallet_path, "somewallet2")
 
     def test_maybe_extract_lightning_payment_identifier(self):
         bolt11 = "lnbc1ps9zprzpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqsp5zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zyg3zygsdqq9qypqszpyrpe4tym8d3q87d43cgdhhlsrt78epu7u99mkzttmt2wtsx0304rrw50addkryfrd3vn3zy467vxwlmf4uz7yvntuwjr2hqjl9lw5cqwtp2dy"

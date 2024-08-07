@@ -5,27 +5,27 @@ import tempfile
 import shutil
 from io import StringIO
 
-from electrum.simple_config import SimpleConfig, read_user_config
-from electrum import constants
+from pywallet.simple_config import SimpleConfig, read_user_config
+from pywallet import constants
 
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 
 MAX_MSG_SIZE_DEFAULT = SimpleConfig.NETWORK_MAX_INCOMING_MSG_SIZE.get_default_value()
 assert isinstance(MAX_MSG_SIZE_DEFAULT, int), MAX_MSG_SIZE_DEFAULT
 
 
-class Test_SimpleConfig(ElectrumTestCase):
+class Test_SimpleConfig(PywalletTestCase):
 
     def setUp(self):
         super(Test_SimpleConfig, self).setUp()
         # make sure "read_user_config" and "user_dir" return a temporary directory.
-        self.electrum_dir = tempfile.mkdtemp()
+        self.pywallet_dir = tempfile.mkdtemp()
         # Do the same for the user dir to avoid overwriting the real configuration
-        # for development machines with electrum installed :)
+        # for development machines with pywallet installed :)
         self.user_dir = tempfile.mkdtemp()
 
-        self.options = {"electrum_path": self.electrum_dir}
+        self.options = {"pywallet_path": self.pywallet_dir}
         self._saved_stdout = sys.stdout
         self._stdout_buffer = StringIO()
         sys.stdout = self._stdout_buffer
@@ -34,7 +34,7 @@ class Test_SimpleConfig(ElectrumTestCase):
         super(Test_SimpleConfig, self).tearDown()
         # Remove the temporary directory after each test (to make sure we don't
         # pollute /tmp for nothing.
-        shutil.rmtree(self.electrum_dir)
+        shutil.rmtree(self.pywallet_dir)
         shutil.rmtree(self.user_dir)
 
         # Restore the "real" stdout
@@ -59,44 +59,44 @@ class Test_SimpleConfig(ElectrumTestCase):
     def test_simple_config_command_line_overrides_everything(self):
         """Options passed by command line override all other configuration
         sources"""
-        fake_read_user = lambda _: {"electrum_path": "b"}
+        fake_read_user = lambda _: {"pywallet_path": "b"}
         read_user_dir = lambda : self.user_dir
         config = SimpleConfig(options=self.options,
                               read_user_config_function=fake_read_user,
                               read_user_dir_function=read_user_dir)
-        self.assertEqual(self.options.get("electrum_path"),
-                         config.get("electrum_path"))
+        self.assertEqual(self.options.get("pywallet_path"),
+                         config.get("pywallet_path"))
 
     def test_simple_config_user_config_is_used_if_others_arent_specified(self):
         """If no system-wide configuration and no command-line options are
         specified, the user configuration is used instead."""
-        fake_read_user = lambda _: {"electrum_path": self.electrum_dir}
+        fake_read_user = lambda _: {"pywallet_path": self.pywallet_dir}
         read_user_dir = lambda : self.user_dir
         config = SimpleConfig(options={},
                               read_user_config_function=fake_read_user,
                               read_user_dir_function=read_user_dir)
-        self.assertEqual(self.options.get("electrum_path"),
-                         config.get("electrum_path"))
+        self.assertEqual(self.options.get("pywallet_path"),
+                         config.get("pywallet_path"))
 
     def test_cannot_set_options_passed_by_command_line(self):
-        fake_read_user = lambda _: {"electrum_path": "b"}
+        fake_read_user = lambda _: {"pywallet_path": "b"}
         read_user_dir = lambda : self.user_dir
         config = SimpleConfig(options=self.options,
                               read_user_config_function=fake_read_user,
                               read_user_dir_function=read_user_dir)
-        config.set_key("electrum_path", "c")
-        self.assertEqual(self.options.get("electrum_path"),
-                         config.get("electrum_path"))
+        config.set_key("pywallet_path", "c")
+        self.assertEqual(self.options.get("pywallet_path"),
+                         config.get("pywallet_path"))
 
     def test_can_set_options_set_in_user_config(self):
         another_path = tempfile.mkdtemp()
-        fake_read_user = lambda _: {"electrum_path": self.electrum_dir}
+        fake_read_user = lambda _: {"pywallet_path": self.pywallet_dir}
         read_user_dir = lambda : self.user_dir
         config = SimpleConfig(options={},
                               read_user_config_function=fake_read_user,
                               read_user_dir_function=read_user_dir)
-        config.set_key("electrum_path", another_path)
-        self.assertEqual(another_path, config.get("electrum_path"))
+        config.set_key("pywallet_path", another_path)
+        self.assertEqual(another_path, config.get("pywallet_path"))
 
     def test_user_config_is_not_written_with_read_only_config(self):
         """The user config does not contain command-line options when saved."""
@@ -108,7 +108,7 @@ class Test_SimpleConfig(ElectrumTestCase):
                               read_user_dir_function=read_user_dir)
         config.save_user_config()
         contents = None
-        with open(os.path.join(self.electrum_dir, "config"), "r") as f:
+        with open(os.path.join(self.pywallet_dir, "config"), "r") as f:
             contents = f.read()
         result = ast.literal_eval(contents)
         result.pop('config_version', None)
@@ -255,7 +255,7 @@ class Test_SimpleConfig(ElectrumTestCase):
         self.assertEqual(36495000, config.fee_to_depth(0.5))
 
 
-class TestUserConfig(ElectrumTestCase):
+class TestUserConfig(PywalletTestCase):
 
     def setUp(self):
         super(TestUserConfig, self).setUp()

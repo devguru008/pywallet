@@ -5,11 +5,11 @@ import threading
 import tempfile
 import shutil
 
-import electrum
-import electrum.logging
-from electrum import constants
-from electrum import util
-from electrum.logging import Logger
+import pywallet
+import pywallet.logging
+from pywallet import constants
+from pywallet import util
+from pywallet.logging import Logger
 
 
 # Set this locally to make the test suite run faster.
@@ -19,12 +19,12 @@ from electrum.logging import Logger
 FAST_TESTS = False
 
 
-electrum.logging._configure_stderr_logging()
+pywallet.logging._configure_stderr_logging()
 
-electrum.util.AS_LIB_USER_I_WANT_TO_MANAGE_MY_OWN_ASYNCIO_LOOP = True
+pywallet.util.AS_LIB_USER_I_WANT_TO_MANAGE_MY_OWN_ASYNCIO_LOOP = True
 
 
-class ElectrumTestCase(unittest.IsolatedAsyncioTestCase, Logger):
+class PywalletTestCase(unittest.IsolatedAsyncioTestCase, Logger):
     """Base class for our unit tests."""
 
     TESTNET = False
@@ -52,7 +52,7 @@ class ElectrumTestCase(unittest.IsolatedAsyncioTestCase, Logger):
     def setUp(self):
         self._test_lock.acquire()
         super().setUp()
-        self.electrum_path = tempfile.mkdtemp()
+        self.pywallet_path = tempfile.mkdtemp()
         assert util._asyncio_event_loop is None, "global event loop already set?!"
 
     async def asyncSetUp(self):
@@ -64,7 +64,7 @@ class ElectrumTestCase(unittest.IsolatedAsyncioTestCase, Logger):
         util._asyncio_event_loop = loop
 
     def tearDown(self):
-        shutil.rmtree(self.electrum_path)
+        shutil.rmtree(self.pywallet_path)
         super().tearDown()
         util._asyncio_event_loop = None  # cleared here, at the ~last possible moment. asyncTearDown is too early.
         self._test_lock.release()

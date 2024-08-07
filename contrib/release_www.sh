@@ -3,8 +3,8 @@
 # env vars:
 # - WWW_DIR: path to "pywallet-web" git clone
 # - for signing the version announcement file:
-#   - ELECTRUM_SIGNING_ADDRESS (required)
-#   - ELECTRUM_SIGNING_WALLET (required)
+#   - PYWALLET_SIGNING_ADDRESS (required)
+#   - PYWALLET_SIGNING_WALLET (required)
 #
 
 set -e
@@ -29,8 +29,8 @@ if [ -z "$WWW_DIR" ] ; then
     WWW_DIR=/opt/pywallet-web
 fi
 
-if [ -z "$ELECTRUM_SIGNING_WALLET" ] || [ -z "$ELECTRUM_SIGNING_ADDRESS" ]; then
-    echo "You need to set env vars ELECTRUM_SIGNING_WALLET and ELECTRUM_SIGNING_ADDRESS!"
+if [ -z "$PYWALLET_SIGNING_WALLET" ] || [ -z "$PYWALLET_SIGNING_ADDRESS" ]; then
+    echo "You need to set env vars PYWALLET_SIGNING_WALLET and PYWALLET_SIGNING_ADDRESS!"
     exit 1
 fi
 
@@ -42,8 +42,8 @@ set -x
 info "updating www repo"
 ./contrib/make_download "$WWW_DIR"
 info "signing the version announcement file"
-sig=$(./run_pywallet -o signmessage $ELECTRUM_SIGNING_ADDRESS $VERSION -w $ELECTRUM_SIGNING_WALLET)
-echo "{ \"version\":\"$VERSION\", \"signatures\":{ \"$ELECTRUM_SIGNING_ADDRESS\":\"$sig\"}}" > "$WWW_DIR"/version
+sig=$(./run_pywallet -o signmessage $PYWALLET_SIGNING_ADDRESS $VERSION -w $PYWALLET_SIGNING_WALLET)
+echo "{ \"version\":\"$VERSION\", \"signatures\":{ \"$PYWALLET_SIGNING_ADDRESS\":\"$sig\"}}" > "$WWW_DIR"/version
 
 # push changes to website repo
 pushd "$WWW_DIR"

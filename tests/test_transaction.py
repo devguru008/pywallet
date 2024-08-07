@@ -2,19 +2,19 @@ import json
 import os
 from typing import NamedTuple, Union
 
-from electrum import transaction, bitcoin
-from electrum.transaction import (convert_raw_tx_to_hex, tx_from_any, Transaction,
+from pywallet import transaction, bitcoin
+from pywallet.transaction import (convert_raw_tx_to_hex, tx_from_any, Transaction,
                                   PartialTransaction, TxOutpoint, PartialTxInput,
                                   PartialTxOutput, Sighash, match_script_against_template,
                                   SCRIPTPUBKEY_TEMPLATE_ANYSEGWIT, TxOutput)
-from electrum.util import bfh
-from electrum.bitcoin import (deserialize_privkey, opcodes,
+from pywallet.util import bfh
+from pywallet.bitcoin import (deserialize_privkey, opcodes,
                               construct_script, construct_witness)
-from electrum.ecc import ECPrivkey
-from electrum import descriptor
+from pywallet.ecc import ECPrivkey
+from pywallet import descriptor
 
 from .test_bitcoin import disable_ecdsa_r_value_grinding
-from . import ElectrumTestCase
+from . import PywalletTestCase
 
 signed_blob = '01000000012a5c9a94fcde98f5581cd00162c60a13936ceb75389ea65bf38633b424eb4031000000006c493046022100a82bbc57a0136751e5433f41cf000b3f1a99c6744775e76ec764fb78c54ee100022100f9e80b7de89de861dc6fb0c1429d5da72c2b6b2ee2406bc9bfb1beedd729d985012102e61d176da16edd1d258a200ad9759ef63adf8e14cd97f53227bae35cdb84d2f6ffffffff0140420f00000000001976a914230ac37834073a42146f11ef8414ae929feaafc388ac00000000'
 v2_blob = "0200000001191601a44a81e061502b7bfbc6eaa1cef6d1e6af5308ef96c9342f71dbf4b9b5000000006b483045022100a6d44d0a651790a477e75334adfb8aae94d6612d01187b2c02526e340a7fd6c8022028bdf7a64a54906b13b145cd5dab21a26bd4b85d6044e9b97bceab5be44c2a9201210253e8e0254b0c95776786e40984c1aa32a7d03efa6bdacdea5f421b774917d346feffffff026b20fa04000000001976a914024db2e87dd7cfd0e5f266c5f212e21a31d805a588aca0860100000000001976a91421919b94ae5cefcdf0271191459157cdb41c4cbf88aca6240700"
@@ -22,7 +22,7 @@ signed_segwit_blob = "01000000000101b66d722484f2db63e827ebf41d02684fed0c6550e850
 
 signed_blob_signatures = [bfh('3046022100a82bbc57a0136751e5433f41cf000b3f1a99c6744775e76ec764fb78c54ee100022100f9e80b7de89de861dc6fb0c1429d5da72c2b6b2ee2406bc9bfb1beedd729d98501'),]
 
-class TestBCDataStream(ElectrumTestCase):
+class TestBCDataStream(PywalletTestCase):
 
     def test_compact_size(self):
         s = transaction.BCDataStream()
@@ -81,7 +81,7 @@ class TestBCDataStream(ElectrumTestCase):
         self.assertFalse(s.can_read_more())
 
 
-class TestTransaction(ElectrumTestCase):
+class TestTransaction(PywalletTestCase):
     def test_match_against_script_template(self):
         script = construct_script([opcodes.OP_5, bytes(29)])
         self.assertTrue(match_script_against_template(script, SCRIPTPUBKEY_TEMPLATE_ANYSEGWIT))
@@ -861,7 +861,7 @@ class TestTransaction(ElectrumTestCase):
 # txns from Bitcoin Core ends <---
 
 
-class TestTransactionTestnet(ElectrumTestCase):
+class TestTransactionTestnet(PywalletTestCase):
     TESTNET = True
 
     def test_spending_op_cltv_p2sh(self):
@@ -931,7 +931,7 @@ class TestTransactionTestnet(ElectrumTestCase):
         self.assertEqual('020000000001019ad573c69e60c209e0ff36f281ae4f700a8d59f846e7ff5c020352fd1e97808600000000000000000001fa840100000000001600145a209b202bc19b3d345a75cf8ab51cb471913a790247304402207b191c1e3ff1a2d3541770b496c9f871406114746b3aa7347ec4ef0423d3a975022043d3a746fa7a794d97e95d74b6d17d618dfc4cd7644476813e08006f271e51bd012a046c4f855fb1752102aec53aa5f347219a7378b13006eb16ce48125f9cf14f04a5509a565ad5e51507ac6c4f855f',
                          tx.serialize())
 
-class TestSighashBIP143(ElectrumTestCase):
+class TestSighashBIP143(PywalletTestCase):
     #These tests are taken from bip143, https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki
     #Input of transaction
     locktime=0
@@ -996,7 +996,7 @@ class TestSighashBIP143(ElectrumTestCase):
                          sig.hex())
 
 
-class TestSighashBIP341(ElectrumTestCase):
+class TestSighashBIP341(PywalletTestCase):
 
     def test_taproot_keypath_spending(self):
         test_vector_file = os.path.join(os.path.dirname(__file__), "bip-0341", "wallet-test-vectors.json")

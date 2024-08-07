@@ -5,7 +5,7 @@ set -e
 # Parameterize
 PYTHON_VERSION=3.11.9
 PY_VER_MAJOR="3.11"  # as it appears in fs paths
-PACKAGE=Electrum
+PACKAGE=Pywallet
 GIT_REPO=https://github.com/spesmilo/electrum
 
 export GCC_STRIP_BINARIES="1"
@@ -96,7 +96,7 @@ PYINSTALLER_COMMIT="5d7a0449ecea400eccbbb30d5fcef27d72f8f75d"
         exit 0
     fi
     cd "$PROJECT_ROOT"
-    ELECTRUM_COMMIT_HASH=$(git rev-parse HEAD)
+    PYWALLET_COMMIT_HASH=$(git rev-parse HEAD)
     cd "$CACHEDIR"
     rm -rf pyinstaller
     mkdir pyinstaller
@@ -109,7 +109,7 @@ PYINSTALLER_COMMIT="5d7a0449ecea400eccbbb30d5fcef27d72f8f75d"
     rm -fv PyInstaller/bootloader/Darwin-*/run* || true
     # add reproducible randomness. this ensures we build a different bootloader for each commit.
     # if we built the same one for all releases, that might also get anti-virus false positives
-    echo "const char *electrum_tag = \"tagged by Electrum@$ELECTRUM_COMMIT_HASH\";" >> ./bootloader/src/pyi_main.c
+    echo "const char *pywallet_tag = \"tagged by Pywallet@$PYWALLET_COMMIT_HASH\";" >> ./bootloader/src/pyi_main.c
     pushd bootloader
     # compile bootloader
     python3 ./waf all CFLAGS="-static"
@@ -136,10 +136,10 @@ info "generating locale"
         brew install gettext
         brew link --force gettext
     fi
-    LOCALE="$PROJECT_ROOT/electrum/locale/"
+    LOCALE="$PROJECT_ROOT/pywallet/locale/"
     # we want the binary to have only compiled (.mo) locale files; not source (.po) files
     rm -rf "$LOCALE"
-    "$CONTRIB/build_locale.sh" "$CONTRIB/deterministic-build/electrum-locale/locale/" "$LOCALE"
+    "$CONTRIB/build_locale.sh" "$CONTRIB/deterministic-build/pywallet-locale/locale/" "$LOCALE"
 ) || fail "failed generating locale"
 
 
@@ -149,7 +149,7 @@ if [ ! -f "$DLL_TARGET_DIR/libsecp256k1.2.dylib" ]; then
 else
     info "Skipping libsecp256k1 build: reusing already built dylib."
 fi
-cp -f "$DLL_TARGET_DIR"/libsecp256k1.*.dylib "$PROJECT_ROOT/electrum/" || fail "Could not copy libsecp256k1 dylib"
+cp -f "$DLL_TARGET_DIR"/libsecp256k1.*.dylib "$PROJECT_ROOT/pywallet/" || fail "Could not copy libsecp256k1 dylib"
 
 if [ ! -f "$DLL_TARGET_DIR/libzbar.0.dylib" ]; then
     info "Building ZBar dylib..."
@@ -157,7 +157,7 @@ if [ ! -f "$DLL_TARGET_DIR/libzbar.0.dylib" ]; then
 else
     info "Skipping ZBar build: reusing already built dylib."
 fi
-cp -f "$DLL_TARGET_DIR/libzbar.0.dylib" "$PROJECT_ROOT/electrum/" || fail "Could not copy ZBar dylib"
+cp -f "$DLL_TARGET_DIR/libzbar.0.dylib" "$PROJECT_ROOT/pywallet/" || fail "Could not copy ZBar dylib"
 
 if [ ! -f "$DLL_TARGET_DIR/libusb-1.0.dylib" ]; then
     info "Building libusb dylib..."
@@ -165,7 +165,7 @@ if [ ! -f "$DLL_TARGET_DIR/libusb-1.0.dylib" ]; then
 else
     info "Skipping libusb build: reusing already built dylib."
 fi
-cp -f "$DLL_TARGET_DIR/libusb-1.0.dylib" "$PROJECT_ROOT/electrum/" || fail "Could not copy libusb dylib"
+cp -f "$DLL_TARGET_DIR/libusb-1.0.dylib" "$PROJECT_ROOT/pywallet/" || fail "Could not copy libusb dylib"
 
 
 info "Installing requirements..."
@@ -189,9 +189,9 @@ python3 -m pip install --no-build-isolation --no-dependencies --no-binary :all: 
 info "Building $PACKAGE..."
 python3 -m pip install --no-build-isolation --no-dependencies \
     --no-warn-script-location . > /dev/null || fail "Could not build $PACKAGE"
-# pyinstaller needs to be able to "import electrum", for which we need libsecp256k1:
+# pyinstaller needs to be able to "import pywallet", for which we need libsecp256k1:
 # (or could try "pip install -e" instead)
-cp "$PROJECT_ROOT/electrum"/libsecp256k1.*.dylib "$VENV_DIR/lib/python$PY_VER_MAJOR/site-packages/electrum/"
+cp "$PROJECT_ROOT/pywallet"/libsecp256k1.*.dylib "$VENV_DIR/lib/python$PY_VER_MAJOR/site-packages/pywallet/"
 
 # strip debug symbols of some compiled libs
 # - hidapi (hid.cpython-39-darwin.so) in particular is not reproducible without this
@@ -210,7 +210,7 @@ info "Finished building unsigned dist/${PACKAGE}.app. This hash should be reprod
 find "dist/${PACKAGE}.app" -type f -print0 | sort -z | xargs -0 shasum -a 256 | shasum -a 256
 
 info "Creating unsigned .DMG"
-hdiutil create -fs HFS+ -volname $PACKAGE -srcfolder dist/$PACKAGE.app dist/electrum-$VERSION-unsigned.dmg || fail "Could not create .DMG"
+hdiutil create -fs HFS+ -volname $PACKAGE -srcfolder dist/$PACKAGE.app dist/pywallet-$VERSION-unsigned.dmg || fail "Could not create .DMG"
 
 info "App was built successfully but was not code signed. Users may get security warnings from macOS."
 info "Now you also need to run sign_osx.sh to codesign/notarize the binary."
