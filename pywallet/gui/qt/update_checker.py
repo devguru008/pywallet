@@ -20,7 +20,7 @@ from pywallet.network import Network
 from pywallet._vendor.distutils.version import StrictVersion
 
 class UpdateCheck(QDialog, Logger):
-    url = "https://wallet.caprifin.co/check_version.php"
+    url = "https://wallet.caprifin.co/check_version"
     download_url = "https://wallet.caprifin.co/#download"
 
     VERSION_ANNOUNCEMENT_SIGNING_KEYS = (
